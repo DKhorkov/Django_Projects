@@ -18,7 +18,7 @@ class Entry(models.Model):
     """Информация, изученная пользователем по теме."""
     topic = models.ForeignKey(Topic, on_delete=models.CASCADE)  # При удалении темы все записи тоже удаляются.
     text = models.TextField()
-    data_added = models.DateTimeField(auto_now_add=True)
+    date_added = models.DateTimeField(auto_now_add=True)
 
     class Meta:
         """В случае обращения к 2 и более записям будет использовано корректное множественное число слово Entry."""

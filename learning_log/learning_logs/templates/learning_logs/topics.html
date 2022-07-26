@@ -1,0 +1,15 @@
+{% extends 'learning_logs/base.html' %}  <!-- Наследование от родительского шаблона -->
+
+{% block content %}
+    <p>Topics</p>
+
+    <ul>  <!-- "<ul> </ul>" - это теги для отступа перед элементами списка.> -->
+        {% for topic in topics %}  <!-- Инструкция цикла for -->
+            <li>   <!-- "<li> </li>" - Обозначение элементов списка> -->
+                <a href="{% url 'learning_logs:topic' topic.id %}">{{ topic }}</a>
+            </li>
+        {% empty %}  <!-- Тег на случай, если нет топиков в Topic -->
+            <li>No topics were added yet.</li>
+        {% endfor %}  <!-- Тег для окончания цикла for-->
+    </ul>
+{% endblock content %}
