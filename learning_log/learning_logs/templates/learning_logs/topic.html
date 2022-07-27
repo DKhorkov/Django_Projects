@@ -1,3 +1,7 @@
+<head>
+    <meta charset="UTF-8">
+    <title>Entries on the selected topic</title>
+</head>
 {% extends 'learning_logs/base.html' %}
 
 {% block content %}
@@ -9,6 +13,7 @@
             <li>
                 <p>{{ entry.date_added|date:'M d, Y H:i'}}</p>  <!-- "|" -фильтр-функция -->
                 <p>{{ entry.text|linebreaks }}</p>  <!-- "linebreaks" - создает отступы, а не сплошной текст.-->
+                <p><a href="{% url 'learning_logs:edit_entry' entry.id %}">Edit entry</a></p>
             </li>
         {% empty %}
             <li>No entries were added yet.</li>
