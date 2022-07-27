@@ -12,4 +12,7 @@
             <li>No topics were added yet.</li>
         {% endfor %}  <!-- Тег для окончания цикла for-->
     </ul>
+
+    <a href="{% url 'learning_logs:new_topic' %}">Add a new topic</a>
+
 {% endblock content %}

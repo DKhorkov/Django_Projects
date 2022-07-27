@@ -9,4 +9,6 @@ urlpatterns = [
     path('', views.index, name='index'),  # Домашняя страница
     path('topics', views.topics, name='topics'),  # Страница с темами
     path('topics/<topic_id>', views.topic, name='topic'),  # Страница с конкретной темой, выбранной пользователем
+    path('new_topic', views.new_topic, name='new_topic'),  # Страница для добавления новой темы
+    path('new_entry/<topic_id>', views.new_entry, name='new_entry'),  # Страница для добавления новой записи по теме
 ]
