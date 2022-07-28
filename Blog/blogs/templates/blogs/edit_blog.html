@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Редактирование записи</title>
+</head>
+<body>
+<a href="{% url 'blogs:main_page' %}">Главная страница</a>
+<p>Редактирование записи {{blog.title}}:</p>
+
+<form action="{% url 'blogs:edit_blog' blog.id %}" method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button name="submit">Сохранить изменения</button>
+</form>
+
+</body>
+</html>

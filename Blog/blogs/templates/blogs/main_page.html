@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Главная страница</title>
+</head>
+<body>
+<a href="{% url 'blogs:new_blog' %}">Создать новый блог</a>
+
+{% for blog in blogs %}
+    <p>{{ blog.title|linebreaks }}</p>
+<p><a href="{% url 'blogs:edit_blog' blog.id %}">Редактировать блог</a></p>
+    <ul>
+        <li>
+            <p>{{ blog.date_added|date:'M d, Y H:i' }}</p>
+            <p>{{ blog.text|linebreaks }}</p>
+        </li>
+    </ul>
+{% endfor %}
+</body>
+</html>

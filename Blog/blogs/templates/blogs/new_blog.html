@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Создание нового блога</title>
+</head>
+<body>
+<a href="{% url 'blogs:main_page' %}">Главная страница</a>
+<p>Создание нового блога:</p>
+<form action="{% url 'blogs:new_blog' %}" method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button name="submit">Создать</button>
+</form>
+</body>
+</html>
