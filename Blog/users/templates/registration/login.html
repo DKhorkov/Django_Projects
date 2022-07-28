@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Авторизация</title>
+</head>
+<body>
+
+<a href="{% url 'blogs:main_page' %}">Главная страница с блогами</a>
+
+{% if form.errors %}
+    <p>Your login and password didn't match. Please try again.</p>
+  {% endif %}
+<form action="{% url 'users:login' %}" method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button name="submit">Log in</button>
+    <input type="hidden" name="next" value="{% url 'blogs:main_page' %}"/>
+</form>
+
+
+</body>
+</html>

@@ -33,6 +33,7 @@ ALLOWED_HOSTS = []
 INSTALLED_APPS = [
     # Мои приложения:
     'blogs',
+    'users',
 
     # Стандартные приложения:
     'django.contrib.admin',

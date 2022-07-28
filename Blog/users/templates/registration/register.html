@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Регистрация нового пользователя</title>
+</head>
+<body>
+<a href="{% url 'blogs:main_page' %}">Главная страница с блогами</a>
+
+<p>Регистрация нового пользователя:</p>
+
+<form action="{% url 'users:register' %}" method="post">
+  {% csrf_token %}
+  {{form.as_p}}
+  <button name="submit">Регистрация</button>
+  <input type="hidden" name="'next" value="{% url 'blogs:main_page' %}"/>
+</form>
+
+
+</body>
+</html>
