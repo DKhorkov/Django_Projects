@@ -39,3 +39,11 @@ def edit_blog(request, blog_id):
     # Если не включить в контекст "блог", то будет ошибка, ибо неоткуда брать id в edit_blog.html:
     context = {'form': form, 'blog': blog}
     return render(request, 'blogs/edit_blog.html', context)
+
+
+def delete_blog(request, blog_id):
+    """Удаление блога"""
+    blog = BlogPost.objects.get(id=blog_id)
+    blog.delete()
+    return redirect('blogs:main_page')
+
