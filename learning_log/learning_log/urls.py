@@ -18,5 +18,6 @@ from django.urls import path, include
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('users/', include('users.urls')),  # http://localhost:8000/users/... - соответствие с данным путем.
     path('', include('learning_logs.urls')),
 ]

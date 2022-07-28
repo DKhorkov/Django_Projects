@@ -1,6 +1,8 @@
 /learning_log/learning_log/__pycache__/
 /learning_log/learning_logs/__pycache__/
 /learning_log/learning_logs/migrations/__pycache__/
+/learning_log/users/__pycache__/
+/learning_log/users/migrations/__pycache__/
 /Blog/Blog/__pycache__/
 /Blog/blogs/__pycache__/
 /Blog/blogs/migrations/__pycache__/
