@@ -17,10 +17,13 @@
 
 {% for blog in blogs %}
     <p>{{ blog.title|linebreaks }}</p>
-    <a href="{% url 'blogs:edit_blog' blog.id %}">Редактировать блог</a>
-    <a href="{% url 'blogs:delete_blog' blog.id %}">Удалить блог</a>
+    {% if blog.owner == request.user %}
+        <a href="{% url 'blogs:edit_blog' blog.id %}">Редактировать блог</a>
+        <a href="{% url 'blogs:delete_blog' blog.id %}">Удалить блог</a>
+    {% endif %}
     <ul>
         <li>
+            <p>Автор блога: {{blog.owner}}</p>
             <p>{{ blog.date_added|date:'M d, Y H:i' }}</p>
             <p>{{ blog.text|linebreaks }}</p>
         </li>
