@@ -12,6 +12,22 @@ https://docs.djangoproject.com/en/4.0/ref/settings/
 
 from pathlib import Path
 
+
+# Мои настройки:
+LOGIN_URL = 'users/login'  # В случае, если пользователь не авторизован,
+# то декоратор во views перенаправит человека на страницу авторизации, когда тот захочет перейти в темы.
+
+
+
+
+
+
+
+
+
+
+
+
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 

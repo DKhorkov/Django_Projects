@@ -1,8 +1,18 @@
 from django.shortcuts import render, redirect
+from django.contrib.auth.decorators import login_required
+from django.http import Http404
 
 from .models import Topic, Entry
 from .forms import TopicForm, EntryForm
+
 # Create your views here.
+
+
+def check_user(topic, request):
+    """Проверяет, что тема принадлежит текущему пользователю.
+    Если это не так, то будет вызвана ошибка 404 для недопущения работы с чужими данными."""
+    if not topic.owner == request.user:
+        raise Http404
 
 
 def index(request):
@@ -10,21 +20,27 @@ def index(request):
     return render(request, 'learning_logs/index.html')
 
 
+@login_required()
 def topics(request):
     """Выводит список тем."""
-    topics = Topic.objects.all()
+    topics = Topic.objects.filter(owner=request.user).all()  # Темы видит только их создатель.
     context = {'topics': topics}
     return render(request, 'learning_logs/topics.html', context)
 
 
+@login_required()
 def topic(request, topic_id):
     """Выводи инфы по одной теме."""
     topic = Topic.objects.get(id=topic_id)
+
+    check_user(topic, request)  # Проверка того, что тема принадлежит текущему пользователю.
+
     entries = topic.entry_set.all()
     context = {'topic': topic, 'entries': entries}
     return render(request, 'learning_logs/topic.html', context)
 
 
+@login_required()
 def new_topic(request):
     """Определяет новую тему."""
 
@@ -33,8 +49,14 @@ def new_topic(request):
     else:
         # Отправлены данные POST, поэтому их нужно обработать:
         form = TopicForm(data=request.POST)  # Информация, заполненная пользователем.
+
+        # Сохраняет форму, если она корректно заполнена (все поля по умолчанию заполнены):
         if form.is_valid():
-            form.save()  # Сохраняет форму, если она корректно заполнена (все поля по умолчанию заполнены).
+            # Сохранение темы в переменную, а не сразу в БД, ибо нужно еще присвоить данной теме владельца,
+            # к которому она относится, а только потом сохранить.
+            new_topic = form.save(commit=False)
+            new_topic.owner = request.user
+            new_topic.save()
             return redirect('learning_logs:topics')
 
     # Вывести пустую или недействительную форму:
@@ -42,9 +64,13 @@ def new_topic(request):
     return render(request, 'learning_logs/new_topic.html', context)
 
 
+@login_required()
 def new_entry(request, topic_id):
     """Добавляет новую запись по конкретной теме."""
     topic = Topic.objects.get(id=topic_id)
+
+    check_user(topic, request)
+
     if request.method != 'POST':
         form = EntryForm()
     else:
@@ -61,10 +87,13 @@ def new_entry(request, topic_id):
     return render(request, 'learning_logs/new_entry.html', context=context)
 
 
+@login_required()
 def edit_entry(request, entry_id):
     """Редактирование записи"""
     entry = Entry.objects.get(id=entry_id)
     topic = entry.topic
+
+    check_user(topic, request)  # Проверка, что тема, к которой относится запись, принадлежит текущему пользователю
 
     if request.method != 'POST':
         form = EntryForm(instance=entry)  # Созданная форма будет не пустой, а с инфой из текущей записи.
