@@ -7,23 +7,30 @@
 <body>
 
 {% extends 'learning_logs/base.html' %}
+{% load bootstrap4 %}
+
+{% block page_header %}
+    <h1 class="display-6">Log into your account:</h1>
+{% endblock page_header %}
 
 {% block content %}
 
-  <!-- Проверка введенных данных (если логин и пароль не находятся в БД, то выдается сообщение об ошибке)-->
-  {% if form.errors %}
-    <p>Your login and password didn't match. Please try again.</p>
-  {% endif %}
+<!-- Проверка на ошибки ниже не нужна, поскольку bootstrap4 самостоятельно управляет ошибками формы-->
+<!--  {% if form.errors %}-->
+<!--    <p>Your login and password didn't match. Please try again.</p>-->
+<!--  {% endif %}-->
 
-  <form  action="{% url 'users:login' %}" method="post">
+  <form  action="{% url 'users:login' %}" method="post" class="form">
       {% csrf_token %}
-      {{ form.as_p }}
-      <button name="submit">Log in</button>
+      {% bootstrap_form form %}
+      {% buttons %}  <!-- Тег для создания кнопок бутстрап4 -->
+      <button name="submit" class="btn btn-outline-primary">Log in</button>
+      {% endbuttons %}
 
       <!-- Ниже идет настройка ввода. После ввода переадресация на главную страницу. Тип ввода - скрытый.
       Очень важно чтобы имя было "next" иначе будет ошибка :
       "The current path, accounts/profile/, didn’t match any of these.-->
-      <input type="hidden" name="next" value="{% url 'learning_logs:index' %}" />
+      <input type="hidden" name="next" value="{% url 'learning_logs:topics' %}" />
   </form>
 
 {% endblock content %}

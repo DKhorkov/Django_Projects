@@ -9,23 +9,14 @@ https://docs.djangoproject.com/en/4.0/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/4.0/ref/settings/
 """
-
+import os
+import sys
 from pathlib import Path
 
 
 # Мои настройки:
 LOGIN_URL = 'users/login'  # В случае, если пользователь не авторизован,
 # то декоратор во views перенаправит человека на страницу авторизации, когда тот захочет перейти в темы.
-
-
-
-
-
-
-
-
-
-
 
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -50,6 +41,9 @@ INSTALLED_APPS = [
     # Мои приложения:
     'learning_logs',
     'users',
+
+    # Сторонние приложения (секция должна размещаться после собственных приложений, но до приложений по умолчанию):
+    'bootstrap4',
     
     # Стандартные приложения по умолчанию:
     'django.contrib.admin',
@@ -142,3 +136,5 @@ STATIC_URL = 'static/'
 # https://docs.djangoproject.com/en/4.0/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+

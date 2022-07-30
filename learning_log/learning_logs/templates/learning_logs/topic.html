@@ -4,22 +4,34 @@
 </head>
 {% extends 'learning_logs/base.html' %}
 
-{% block content %}
-    <p>Topic: {{topic}}</p>  <!-- Двойные фигурные скобки нужны для вывода названия топика -->
+{% block page_header %}
+    <h1 class="display-4">Topic: {{ topic }}</h1>
+{% endblock page_header %}
 
-    <p>Entries:</p>
+{% block content %}
+
+    <h2 class="display-5">Entries:</h2>
     <ul>
         {% for entry in entries %}
-            <li>
-                <p>{{ entry.date_added|date:'M d, Y H:i'}}</p>  <!-- "|" -фильтр-функция -->
-                <p>{{ entry.text|linebreaks }}</p>  <!-- "linebreaks" - создает отступы, а не сплошной текст.-->
-                <p><a href="{% url 'learning_logs:edit_entry' entry.id %}">Edit entry</a></p>
-            </li>
+
+        <!-- Вместо списка создаем селекторы для каждой записи, которые поделены на заголовок с серым фоном
+         и тело записи с текстом-->
+            <div class="card mb-3">
+                <h4 class="card-header " style="background-color: grey">
+                    {{ entry.date_added|date:'M d, Y H:i'}}  <!-- "|" -фильтр-функция -->
+                    <a class="btn btn-sm btn-outline-warning" href="{% url 'learning_logs:edit_entry' entry.id %}">
+                        Edit entry</a>
+                </h4>
+                <div class="card-body">
+                    <p>{{ entry.text|linebreaks }}</p>  <!-- "linebreaks" - создает отступы, а не сплошной текст.-->
+                </div>
+            </div>
+
         {% empty %}
             <li>No entries were added yet.</li>
         {% endfor %}
     </ul>
 
-    <p><a href="{% url 'learning_logs:new_entry' topic.id %}">Add new entry</a></p>
+    <p><a class="btn btn-sm btn-outline-dark" href="{% url 'learning_logs:new_entry' topic.id %}">Add new entry</a></p>
 
 {% endblock content %}

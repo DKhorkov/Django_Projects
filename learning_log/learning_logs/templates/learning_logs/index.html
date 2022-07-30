@@ -1,5 +1,17 @@
 {% extends 'learning_logs/base.html' %}
 
+{% block page_header %}
+
+    <!-- Используем джамботрона дял домашней страницы, используем заголовок первого уровня
+    и создаем кнопку с регистрацией -->
+    <div class="jumbotron">
+     <h1 class="display-4">Track your learning with Learning Log</h1>
+        <h2><a class="btn btn-lg btn-success" href="{% url 'users:register' %}">Register &raquo </a> to start using!</h2>
+    </div>
+
+{% endblock page_header %}
+
 {% block content %}
- <p>Learning Log helps you to track you progress in learning of any topic.</p>
+ <p>Make your own Learning Log and keep a list of topics you're learning about.
+     Whenever you learn something new about topic, make an entry, summarizing what you've learned.</p>
 {% endblock content %}

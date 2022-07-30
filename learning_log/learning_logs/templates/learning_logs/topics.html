@@ -4,19 +4,22 @@
 </head>
 {% extends 'learning_logs/base.html' %}  <!-- Наследование от родительского шаблона -->
 
+{% block page_header %}
+    <h1 class="display-4">Topics</h1>
+{% endblock page_header %}
+
 {% block content %}
-    <p>Topics</p>
 
     <ul>  <!-- "<ul> </ul>" - это теги для отступа перед элементами списка.> -->
         {% for topic in topics %}  <!-- Инструкция цикла for -->
-            <li>   <!-- "<li> </li>" - Обозначение элементов списка> -->
+            <li><h5>   <!-- "<li> </li>" - Обозначение элементов списка> -->
                 <a href="{% url 'learning_logs:topic' topic.id %}">{{ topic }}</a>
-            </li>
+            </h5></li>
         {% empty %}  <!-- Тег на случай, если нет топиков в Topic -->
-            <li>No topics were added yet.</li>
+        <li><h5>No topics were added yet.</h5></li>
         {% endfor %}  <!-- Тег для окончания цикла for-->
     </ul>
 
-    <a href="{% url 'learning_logs:new_topic' %}">Add a new topic</a>
+    <a class="btn btn-outline-dark btn-sm" href="{% url 'learning_logs:new_topic' %}">Add a new topic</a>
 
 {% endblock content %}

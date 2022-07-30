@@ -1,16 +1,18 @@
-{% load bootstrap4 %}
+{$ load bootstrap4 %}
 
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Learning Log</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">  <!-- Адаптация приложения под любой девайс-->
+    <title>Learning log</title>
 
+    <!-- Включение всех стилевых файлов django-app bootstrap4 + активировать все интерактивное поведение (JS) -->
     {% bootstrap_css %}
-    {% bootstrap_javascript %}
-</head>
+    {% bootstrap_javascript jquery='full' %}
 
+
+</head>
 
 <body>
     <nav class="navbar navbar-expand-mb navbar-light bg-light mb-4 border">  <!-- Стилевое оформление панели приложения-->
@@ -18,9 +20,19 @@
         <!-- Отделение по стилю главной страницы сайта и создание ссылки на нее представлено ниже-->
         <a class="navbar-brand" href="{% url 'learning_logs:index' %}">Learning Log</a>
 
-        <a class="navbar-text" href="{% url 'learning_logs:topics' %}">Topics</a>
+        <!-- Ниже создается кнопка, расширяющая навигационную панель, если она не помещается полностью на экране -->
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse"
+                aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggle-icon"></span></button>
 
-        <div class="navbar-nav ml-auto">  <!-- ml-auto значит, что это левая часть навигационной панели -->
+        <!-- Ниже открывается новая секция навигационной панели, которая будет сворачиваться при маленьком экране -->
+        <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav ml-auto">  <!-- mr-auto значит, что это правая часть навигационной панели -->
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'learning_logs:topics' %}">Topics</a>
+                </li>
+            </ul>
+
             <!--Ниже представлена левая часть навигационной панели с авторизацией и регистрацией пользователя -->
             <ul class="navbar-nav mr-auto">
                 {% if user.is_authenticated %}
