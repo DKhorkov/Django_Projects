@@ -6,9 +6,19 @@
 </head>
 <body>
 
-<a href="{% url 'blogs:main_page' %}">Главная страница с блогами</a>
+{% extends 'blogs/main_page.html' %}
 
-<p>Вы успешно вышли из учетной записи.</p>
+{% block content %}
+<main class="container">
+    <div class="djambotron container" style="background-color: #e4eaed" align="center">
+        <h1>Спасибо за использование приложения. Ждем Вас снова!</h1>
+    </div>
+
+    <div align="center">
+        <i><h4>Вы успешно вышли из учетной записи.</h4></i>
+    </div>
+</main>
+{% endblock content %}
 
 </body>
 </html>

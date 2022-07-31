@@ -5,12 +5,26 @@
     <title>Создание нового блога</title>
 </head>
 <body>
-<a href="{% url 'blogs:main_page' %}">Главная страница</a>
-<p>Создание нового блога:</p>
-<form action="{% url 'blogs:new_blog' %}" method="post">
-    {% csrf_token %}
-    {{ form.as_p }}
-    <button name="submit">Создать</button>
-</form>
+{% extends 'blogs/main_page.html' %}
+{% load bootstrap4 %}
+
+{% block content %}
+    <div class="card mb-3">
+        <div class="card-header" align="center">
+            <h3>Создание нового блога:</h3>
+        </div>
+
+        <div class="card-body container">
+            <form action="{% url 'blogs:new_blog' %}" method="post">
+                {% csrf_token %}
+                {% bootstrap_form form %}
+                <div align="center">
+                    <button name="submit" class="btn btn-primary">Создать</button>
+                </div>
+            </form>
+        </div>
+    </div>
+{% endblock content %}
+
 </body>
 </html>

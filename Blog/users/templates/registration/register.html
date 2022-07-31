@@ -5,17 +5,29 @@
     <title>Регистрация нового пользователя</title>
 </head>
 <body>
-<a href="{% url 'blogs:main_page' %}">Главная страница с блогами</a>
 
-<p>Регистрация нового пользователя:</p>
+{% extends 'blogs/main_page.html' %}
+{% load bootstrap4 %}
 
-<form action="{% url 'users:register' %}" method="post">
-  {% csrf_token %}
-  {{form.as_p}}
-  <button name="submit">Регистрация</button>
-  <input type="hidden" name="'next" value="{% url 'blogs:main_page' %}"/>
-</form>
+{% block content %}
 
+<div class="card mb-3">
+    <div class="card-header" align="center">
+    <h3>Регистрация нового пользователя:</h3>
+    </div>
+
+    <div class="card-body container">
+        <form action="{% url 'users:register' %}" method="post">
+            {% csrf_token %}
+            {% bootstrap_form form %}
+            <div align="center">
+                <button class="btn btn-primary" name="submit">Регистрация</button>
+            </div>
+            <input type="hidden" name="'next" value="{% url 'blogs:main_page' %}"/>
+        </form>
+    </div>
+</div>
+{% endblock content %}
 
 </body>
 </html>

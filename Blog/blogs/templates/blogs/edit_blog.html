@@ -5,14 +5,28 @@
     <title>Редактирование записи</title>
 </head>
 <body>
-<a href="{% url 'blogs:main_page' %}">Главная страница</a>
-<p>Редактирование записи {{blog.title}}:</p>
 
-<form action="{% url 'blogs:edit_blog' blog.id %}" method="post">
-    {% csrf_token %}
-    {{ form.as_p }}
-    <button name="submit">Сохранить изменения</button>
-</form>
+{% extends 'blogs/main_page.html' %}
+{% load bootstrap4 %}
+
+{% block content %}
+
+<div class="card mb-3">
+    <div class="card-header" align="center">
+        <h3>Редактирование записи "{{blog.title}}":</h3>
+    </div>
+
+    <div class="card-body">
+        <form action="{% url 'blogs:edit_blog' blog.id %}" method="post">
+            {% csrf_token %}
+            {% bootstrap_form form %}
+            <div align="center">
+                <button name="submit" class="btn btn-outline-success">Сохранить изменения</button>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock content %}
 
 </body>
 </html>

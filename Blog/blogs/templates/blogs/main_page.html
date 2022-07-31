@@ -1,33 +1,62 @@
+{% load bootstrap4 %}
+
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ru">
 <head>
     <meta charset="UTF-8">
     <title>Главная страница</title>
+
+    {% bootstrap_css %}
+    {% bootstrap_javascript jquery='full' %}
 </head>
 <body>
-<a href="{% url 'blogs:new_blog' %}">Создать новый блог</a> -
+    <nav class="navbar mb-4 border" style="background-color: #e3f2fd;">
+        <a class="navbar-brand" style="color: black" href="{% url 'blogs:main_page' %}">Главная страница</a>
+        <a class="navbar-text" style="color: black" href="{% url 'blogs:new_blog' %}">Создать новый блог</a>
+        <div class="navbar-nav ml-auto">
+            <ul class="navbar-nav ml-auto">
 
-{% if user.is_authenticated %}
-    Добро пожаловать, {{user.username}}!
-    <a href="{% url 'users:logout' %}">Выйти из системы</a>
-{% else %}
-    <a href="{% url 'users:login' %}">Авторизация</a> -
-    <a href="{% url 'users:register' %}">Регистрация</a>
-{% endif %}
+                {% if user.is_authenticated %}
+                    <li class="nav-item">Добро пожаловать, {{user.username}}!</li>
+                    <li class="nav-item">
+                        <a class="navbar-text" href="{% url 'users:logout' %}">Выйти из системы</a>
+                    </li>
 
-{% for blog in blogs %}
-    <p>{{ blog.title|linebreaks }}</p>
-    {% if blog.owner == request.user %}
-        <a href="{% url 'blogs:edit_blog' blog.id %}">Редактировать блог</a>
-        <a href="{% url 'blogs:delete_blog' blog.id %}">Удалить блог</a>
-    {% endif %}
-    <ul>
-        <li>
-            <p>Автор блога: {{blog.owner}}</p>
-            <p>{{ blog.date_added|date:'M d, Y H:i' }}</p>
-            <p>{{ blog.text|linebreaks }}</p>
-        </li>
-    </ul>
-{% endfor %}
+                {% else %}
+                    <li class="nav-item"><a href="{% url 'users:login' %}">Авторизация</a></li>
+                    <li class="nav-item"><a href="{% url 'users:register' %}">Регистрация</a></li>
+                {% endif %}
+            </ul>
+        </div>
+    </nav>
+    {% block content %}
+    <main role="main" class="container ">
+        {% for blog in blogs %}
+            <div class="card mv-3 mb-2 border-bottom ">
+
+                <div class="card header" style="background-color: #50bcf2; color: #2c5469">
+                    <h5 align="center"> {{ blog.title|linebreaks }}</h5>
+                    {% if blog.owner == request.user %}
+                    <div class="card-header" style="background-color: #dbe6d8" align="center">
+                            <a class="btn btn-sm btn-warning" href="{% url 'blogs:edit_blog' blog.id %}">
+                               Редактировать блог</a>
+                            <a class="btn btn-sm btn-danger" href="{% url 'blogs:delete_blog' blog.id %}">
+                               Удалить блог</a>
+                    </div>
+                    {% endif %}
+
+
+                    <div class="card-body" style="background-color: #e4eaed">
+                                <small>
+                                    Автор блога: {{blog.owner}}
+                                    <p>{{ blog.date_added|date:'M d, Y H:i' }}</p>
+                                    <p>{{ blog.text|linebreaks }}</p>
+                                </small>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+    </main>
+    {% endblock content %}
 </body>
 </html>
