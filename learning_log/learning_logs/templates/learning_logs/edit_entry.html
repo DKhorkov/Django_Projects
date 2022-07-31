@@ -3,20 +3,36 @@
 <head>
     <meta charset="UTF-8">
     <title>Editting entry</title>
+
+    <!-- Использование CSS стиля вместо тега "u" html-->
+    <style>
+    .u {
+     text-decoration: underline; }
+    </style>
+
 </head>
 <body>
 
 {% extends 'learning_logs/base.html' %}
+{% load bootstrap4 %}
+
+{% block page_header %}
+    <em>Back to topic</em>
+
+    <!-- Ниже ссылка на блог, запись которого редактируется, сделана наклонной, выделена фоном.
+    Подчеркивание не работает -->
+    <span class="u"><em><mark><a href="{% url 'learning_logs:topic' topic.id %}">{{topic}}</a></mark></em></span>
+    <h1 class="display-5">Edit entry:</h1>
+{% endblock page_header %}
 
 {% block content %}
 
-<p><a href="{% url 'learning_logs:topic' topic.id %}">{{topic}}</a> </p>
-<p>Edit entry:</p>
-
-<form action="{% url 'learning_logs:edit_entry' entry.id %}" method="post">
+<form action="{% url 'learning_logs:edit_entry' entry.id %}" method="post" class="form">
     {% csrf_token %}
-    {{ form.as_p }}
-    <button name="submit">Save changes</button>
+    {% bootstrap_form form %}
+    {% buttons %}
+    <button name="submit" class="btn btn-outline-success">Save changes</button>
+    {% endbuttons %}
 </form>
 
 
