@@ -8,3 +8,4 @@
 /Blog/blogs/migrations/__pycache__/
 /Blog/users/__pycache__/
 /Blog/users/migrations/__pycache__/
+*.sqlite3

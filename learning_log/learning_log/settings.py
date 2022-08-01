@@ -12,11 +12,15 @@ https://docs.djangoproject.com/en/4.0/ref/settings/
 import os
 import sys
 from pathlib import Path
-
+import django_on_heroku
 
 # Мои настройки:
 LOGIN_URL = 'users/login'  # В случае, если пользователь не авторизован,
 # то декоратор во views перенаправит человека на страницу авторизации, когда тот захочет перейти в темы.
+
+
+# Настройки для Heroku:
+django_on_heroku.settings(locals())
 
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -44,7 +48,7 @@ INSTALLED_APPS = [
 
     # Сторонние приложения (секция должна размещаться после собственных приложений, но до приложений по умолчанию):
     'bootstrap4',
-    
+
     # Стандартные приложения по умолчанию:
     'django.contrib.admin',
     'django.contrib.auth',
