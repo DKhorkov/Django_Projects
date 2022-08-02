@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Редактировать информацию об игрушке</title>
+</head>
+<body>
+{% extends 'toys/base.html' %}
+{% load bootstrap4 %}
+
+{% block page_header %}
+    <h5 class="display-3"><small>Редактировать данные об игрушке "{{ toy.title }}":</small></h5>
+{% endblock page_header %}
+
+{% block content %}
+
+<form action="{% url 'toys:edit_toy' toy.id %}" method="post" class="form">
+    {% csrf_token %}
+    {% bootstrap_form form %}
+    {% buttons %}
+    <button name="submit" class="btn btn-outline-success">Сохранить изменения</button>
+    {% endbuttons %}
+</form>
+
+
+{% endblock content %}
+</body>
+</html>

@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Каталог игрушек</title>
+</head>
+<body>
+
+{% extends 'toys/base.html' %}
+
+{% block content %}
+
+{% if user.username == 'NGuliaeva' %}
+    <a href="{% url 'toys:new_toy' %}">Добавить игрушку в каталог</a>
+{% endif %}
+<ul>
+        {% for toy in toys %}
+            <p><b>Название:</b> {{ toy.title|linebreaks }}</p>
+            {% if user.username == 'NGuliaeva' %}
+                <a href="{% url 'toys:edit_toy' toy.id %}">Редактировать</a>
+                <a href="{% url 'toys:delete_toy' toy.id %}">Удалить</a>
+            {% endif %}
+            <p><b>Цена:</b> {{ toy.price}} руб.</p>
+            {% if toy.description %}
+                <p><b>Описание:</b> {{ toy.description }}</p>
+            {% endif %}
+            <p><img src="{{ toy.image.url }}"></p>
+        {% empty %}
+        <li><h5>No toys were added yet.</h5></li>
+        {% endfor %}
+    </ul>
+{% endblock content %}
+
+</body>
+</html>

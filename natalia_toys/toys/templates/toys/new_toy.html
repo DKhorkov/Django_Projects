@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Добавление игрушки в каталог</title>
+</head>
+<body>
+{% extends 'toys/base.html' %}
+{%load bootstrap4 %}
+
+{% block page_header %}
+
+    <h2>Добавить игрушку в каталог:</h2>
+{% endblock page_header %}
+
+{% block content %}
+<!-- enctype="multipart/form-data" необходимо добавить для корректной работы -->
+<form action="{% url 'toys:new_toy' %}" method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    {% bootstrap_form form %}
+    <button name="submit" class="btn btn-outline-success">Добавить в каталог</button>
+</form>
+{% endblock content %}
+</body>
+</html>

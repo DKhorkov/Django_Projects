@@ -9,3 +9,8 @@
 /Blog/users/__pycache__/
 /Blog/users/migrations/__pycache__/
 *.sqlite3
+/natalia_toys/natalia_toys/__pycache__/
+/natalia_toys/toys/__pycache__/
+/natalia_toys/toys/migrations/__pycache__/
+/natalia_toys/users/__pycache__/
+/natalia_toys/users/migrations/__pycache__/

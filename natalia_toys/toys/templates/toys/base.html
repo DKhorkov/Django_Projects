@@ -1,0 +1,50 @@
+{% load bootstrap4 %}
+
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Natalia Toys</title>
+
+    {% bootstrap_css %}
+    {% bootstrap_javascript %}
+</head>
+<body>
+ <nav class="navbar navbar-expand-mb navbar-light bg-light mb-4 border">
+
+        <a class="navbar-brand" href="{% url 'toys:main_page' %}">Главная страница</a>
+        <a class="navbar-text" href="{% url 'toys:toys' %}">Каталог игрушек</a>
+
+        <div class="navbar-nav ml-auto">
+            <ul class="navbar-nav mr-auto">
+                {% if user.is_authenticated %}
+                    <li class="nav-item">
+                        <span class="navbar-text">Hello, {{ user.username }}!</span>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'users:logout' %}">Log out</a>
+                    </li>
+                {% else %}
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'users:login' %}">Log in</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'users:register' %}">Registration</a>
+                    </li>
+                {% endif %}
+            </ul>
+        </div>
+    </nav>
+
+    <main role="main" class="container">
+        <div class="pb-2 mb-2 border-bottom">
+            {% block page_header %}{% endblock page_header %}
+        </div>
+        <div>
+            {% block content %}{% endblock content %}
+        </div>
+    </main>
+
+</body>
+</html>
