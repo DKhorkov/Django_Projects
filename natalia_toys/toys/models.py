@@ -7,7 +7,7 @@ from PIL import Image
 class Toy(models.Model):
     """Класс для представления модели одной игрушки."""
     title = models.CharField(max_length=50, help_text='Название игрушки')
-    price = models.IntegerField(help_text='Цена игрушки')
+    price = models.DecimalField(max_digits=10, decimal_places=2, help_text='Цена игрушки')
     date_added = models.DateTimeField(auto_now_add=True)
     image = models.ImageField(upload_to='images/')
     description = models.TextField(blank=True, help_text='Описание игрушки')

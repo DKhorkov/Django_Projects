@@ -32,6 +32,7 @@ INSTALLED_APPS = [
     # Мои приложения:
     'toys',
     'users',
+    'cart',  # Корзина с игрушками.
 
     # Сторонние приложения:
     'bootstrap4',
@@ -68,6 +69,9 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+
+                # Мои контекстные процессоры:
+                'cart.context_processors.cart',
             ],
         },
     },
@@ -106,7 +110,7 @@ AUTH_PASSWORD_VALIDATORS = [
 # Internationalization
 # https://docs.djangoproject.com/en/4.0/topics/i18n/
 
-LANGUAGE_CODE = 'en-us'
+LANGUAGE_CODE = 'ru-ru'
 
 TIME_ZONE = 'UTC'
 
@@ -127,3 +131,5 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media/')
+
+CART_SESSION_ID = 'cart'  # Ключ для хранения данных корзины в сессии.

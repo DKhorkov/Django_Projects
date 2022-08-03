@@ -6,13 +6,14 @@ from django.http import Http404
 
 from .models import Toy
 from .forms import ToyForm
+from cart.forms import CartAddToyForm
 
 # Create your views here.
 
 
 def check_owner(request):
     """Проверка, что пользователь является владельцев сайта"""
-    if not request.user.username == 'NGuliaeva':
+    if not (request.user.username == 'NGuliaeva' or request.user.username == 'admin'):
         raise Http404
 
 
@@ -24,7 +25,8 @@ def main_page(request):
 def toys(request):
     """Страница с каталогом игрушек"""
     toys = Toy.objects.all()
-    context = {'toys': toys}
+    cart_toy_form = CartAddToyForm()
+    context = {'toys': toys, 'cart_toy_form': cart_toy_form}
     return render(request, 'toys/toys.html', context)
 
 
@@ -71,3 +73,4 @@ def edit_toy(request, toy_id):
             return redirect('toys:toys')
     context = {'form': form, 'toy': toy}
     return render(request, 'toys/edit_toy.html', context)
+
