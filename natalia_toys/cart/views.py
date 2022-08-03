@@ -14,6 +14,8 @@ def cart_add(request, toy_id):
     if form.is_valid():
         cd = form.cleaned_data
         cart.add_to_cart(toy=toy, quantity=cd['quantity'], update_quantity=cd['update'])
+        if cd['update']:
+            return redirect('cart:cart_detail')
     return redirect('toys:toys')
 
 
