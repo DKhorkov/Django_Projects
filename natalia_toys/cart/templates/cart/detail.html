@@ -29,9 +29,9 @@
         {% with toy=item.toy %}
           <tr>
             <td>
-                <img src="{{ toy.image.url }}">
+                <img src="{{ toy.image_1.url }}">
             </td>
-            <td>{{ toy.name }}</td>
+            <td><a href="{% url 'toys:toy_info' toy.id %}">{{ toy.title }}</a></td>
             <td>
               <form action="{% url 'cart:cart_add' toy.id %}" method="post">
                 {{ item.update_quantity_form.quantity }}

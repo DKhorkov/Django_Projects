@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Информация об игрушке</title>
+</head>
+<body>
+{% extends 'toys/base.html' %}
+
+{% block content %}
+<a href="{% url 'toys:toys' %}">Вернуться в каталог игрушек</a>
+<p><b>Название игрушки:</b>{{ toy.title|linebreaks }}</p>
+<p><b>Цена игрушки:</b>{{ toy.price }}  руб.</p>
+<p><b>Описание игрушки:</b>{{ toy.description|linebreaks }}</p>
+<p><b>Фото игрушки:</b></p>
+<ul>
+    {% if toy.image_1 %}<li><img src="{{ toy.image_1.url }}"></li>{% endif %}
+    {% if toy.image_2 %}<li><img src="{{ toy.image_2.url }}"></li>{% endif %}
+    {% if toy.image_3 %}<li><img src="{{ toy.image_3.url }}"></li>{% endif %}
+    {% if toy.image_4 %}<li><img src="{{ toy.image_4.url }}"></li>{% endif %}
+</ul>
+<form action="{% url 'cart:cart_add' toy.id %}" method="post">
+    {{ cart_toy_form }}
+    {% csrf_token %}
+    <input type="submit" value="Добавить в корзину">
+</form>
+{% endblock content %}
+
+</body>
+</html>
