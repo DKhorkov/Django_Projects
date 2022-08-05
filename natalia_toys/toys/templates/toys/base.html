@@ -15,6 +15,7 @@
 
         <a class="navbar-brand" href="{% url 'toys:main_page' %}">Главная страница</a>
         <a class="navbar-text" href="{% url 'toys:toys' %}">Каталог игрушек</a>
+        <a class="navbar-text" href="{% url 'toys:contacts' %}">Контактная информация</a>
 
         <div class="cart">
             {% with total_items=cart|length %}

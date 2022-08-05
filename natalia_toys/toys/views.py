@@ -93,3 +93,8 @@ def edit_toy(request, toy_id):
     context = {'form': form, 'toy': toy}
     return render(request, 'toys/edit_toy.html', context)
 
+
+def contacts(request):
+    """Переход на страницу с контактной информацией"""
+    return render(request, 'toys/contacts.html')
+
