@@ -29,12 +29,12 @@
 
             {% if toy.image_1 %}
                 <p><img src="{{ toy.image_1.url }}"></p>
-                    <form action="{% url 'cart:cart_add' toy.id %}" method="post">
-                        {{ cart_toy_form }}
-                        {% csrf_token %}
-                        <input type="submit" value="Добавить в корзину">
-                    </form>
             {% endif %}
+            <form action="{% url 'cart:cart_add' toy.id %}" method="post">
+                {{ cart_toy_form }}
+                {% csrf_token %}
+                <input type="submit" value="Добавить в корзину">
+            </form>
         {% empty %}
             <li><h5>No toys were added yet.</h5></li>
         {% endfor %}
