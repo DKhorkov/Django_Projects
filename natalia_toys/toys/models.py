@@ -14,6 +14,7 @@ class Toy(models.Model):
     image_2 = models.ImageField(upload_to='images/', blank=True, help_text='Изображений 2')
     image_3 = models.ImageField(upload_to='images/', blank=True, help_text='Изображений 3')
     image_4 = models.ImageField(upload_to='images/', blank=True, help_text='Изображений 4')
+    is_available = models.BooleanField(help_text='Имеется в наличии?')
 
     def __str__(self):
         return self.title

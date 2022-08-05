@@ -32,6 +32,10 @@ def toys(request):
 def toy_info(request, toy_id):
     """Подробная информация об игрушке."""
     toy = Toy.objects.get(id=toy_id)
+
+    if not toy.is_available:
+        raise Http404
+
     cart_toy_form = CartAddToyForm()
     context = {'toy': toy, 'cart_toy_form': cart_toy_form}
     return render(request, 'toys/toy_info.html', context)
