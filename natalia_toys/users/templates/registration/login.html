@@ -20,8 +20,10 @@
       <button name="submit" class="btn btn-outline-primary">Войти</button>
       {% endbuttons %}
 
+      <!-- Ниже создан редирект на каталог игрушек после авторизации пользователя-->
       <input type="hidden" name="next" value="{% url 'toys:toys' %}" />
   </form>
+<a href="{% url 'users:password_reset' %}">Забыли пароль?</a>
 {% endblock content %}
 </body>
 </html>

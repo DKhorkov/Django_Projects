@@ -37,6 +37,7 @@ INSTALLED_APPS = [
     # Сторонние приложения:
     'bootstrap4',
 
+
     # Приложения по умолчанию:
     'django.contrib.admin',
     'django.contrib.auth',
@@ -133,3 +134,15 @@ MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media/')
 
 CART_SESSION_ID = 'cart'  # Ключ для хранения данных корзины в сессии.
+
+# Новый пользователь для дальнейшей кастомизации:
+AUTH_USER_MODEL = 'users.User'
+
+# EMAIL
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.yandex.ru'
+EMAIL_PORT = 465
+EMAIL_HOST_USER = 'NataliaToys@yandex.ru'
+EMAIL_HOST_PASSWORD = 'Liza1501'
+EMAIL_USE_SSL = True
+DEFAULT_FROM_EMAIL = 'NataliaToys@yandex.ru'
