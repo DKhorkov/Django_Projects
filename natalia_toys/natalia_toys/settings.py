@@ -146,3 +146,6 @@ EMAIL_HOST_USER = 'NataliaToys@yandex.ru'
 EMAIL_HOST_PASSWORD = 'Liza1501'
 EMAIL_USE_SSL = True
 DEFAULT_FROM_EMAIL = 'NataliaToys@yandex.ru'
+
+# Формат даты для дней рождения в форме регистрации пользователя:
+DATE_INPUT_FORMATS = ['%d-%m-%Y']
