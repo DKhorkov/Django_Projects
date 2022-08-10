@@ -13,16 +13,19 @@
 {% endblock page_header %}
 
 {% block content %}
+
+
   <form  action="{% url 'users:profile' %}" method="post" class="form">
       {% csrf_token %}
-      {% bootstrap_form form %}
+      {% bootstrap_form user_form %}
       {% buttons %}
       <button name="submit" class="btn btn-outline-primary">Внести изменения</button>
       {% endbuttons %}
 
       <!-- Ниже создан редирект на каталог игрушек после авторизации пользователя-->
-      <input type="hidden" name="next" value="{% url 'users:password_changed' %}" />
+      <input type="hidden" name="next" value="{% url 'users:profile_changed' %}" />
   </form>
+<p><a href="{% url 'users:change_password' %}" class="btn btn-outline-warning">Сменить пароль</a></p>
 {% endblock content %}
 </body>
 </html>
