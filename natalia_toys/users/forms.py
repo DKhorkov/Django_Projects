@@ -14,13 +14,14 @@ class UserCreationForm(UserCreationForm):
         max_length=254,
         widget=forms.EmailInput(attrs={"autocomplete": "email"}),
     )
+    phone = forms.CharField(label=_('Номер телефона'), max_length=11, required=True)
     first_name = forms.CharField(max_length=30, label=_("Имя"))
     last_name = forms.CharField(max_length=30, label=_('Фамилия'))
-    # birthday = forms.DateField(label=_('Дата рождения в формате "день-месяц-год"'), input_formats=DATE_INPUT_FORMATS)
+    birthday = forms.DateField(label=_('Дата рождения в формате "день-месяц-год"'), input_formats=DATE_INPUT_FORMATS)
 
     class Meta(UserCreationForm.Meta):
         model = User
-        fields = ("username", "email", "first_name", "last_name")
+        fields = ['username', 'email', "first_name", "last_name", "phone", "birthday"]
 
 
 class UpdateUserForm(forms.ModelForm):
@@ -29,10 +30,11 @@ class UpdateUserForm(forms.ModelForm):
                                widget=forms.TextInput(attrs={'class': 'form-control'}))
     email = forms.EmailField(required=True,
                              widget=forms.TextInput(attrs={'class': 'form-control'}))
+    phone = forms.CharField(label=_('Номер телефона'), max_length=11, required=True)
     first_name = forms.CharField(max_length=30, label=_("Имя"), widget=forms.TextInput(attrs={'class': 'form-control'}))
     last_name = forms.CharField(max_length=30, label=_('Фамилия'), widget=forms.TextInput(attrs={'class': 'form-control'}))
-    # birthday = forms.DateField(label=_('Дата рождения в формате "день-месяц-год"'), input_formats=DATE_INPUT_FORMATS, widget=forms.TextInput(attrs={'class': 'form-control'}))
+    birthday = forms.DateField(label=_('Дата рождения в формате "день-месяц-год"'), input_formats=DATE_INPUT_FORMATS)
 
     class Meta:
         model = User
-        fields = ['username', 'email', "first_name", "last_name"]
+        fields = ['username', 'email', "first_name", "last_name", "phone", "birthday"]
