@@ -2,6 +2,7 @@ from django.contrib import admin
 from django.contrib.auth import get_user_model
 from django.contrib.auth.admin import UserAdmin
 
+from .forms import UserCreationForm
 
 # Все, что ниже, необходимо для корректной работы админки после переопределения пользователя в users.models.
 User = get_user_model()
@@ -9,4 +10,23 @@ User = get_user_model()
 
 @admin.register(User)
 class UserAdmin(UserAdmin):
-    pass
+    """Доработка создания пользователя внутри админки.
+    Если не использовать код ниже, то в админке будет стандартная модель пользователя."""
+    add_form = UserCreationForm
+    add_fieldsets = (
+        (
+            None,
+            {
+                "classes": ("wide",),
+                "fields": ("username",
+                           "email",
+                           "phone",
+                           "first_name",
+                           "last_name",
+                           "birthday",
+                           "password1",
+                           "password2"),
+            },
+        ),
+    )
+
