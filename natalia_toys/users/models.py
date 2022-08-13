@@ -19,5 +19,7 @@ class User(AbstractUser):
     last_name = models.CharField(_("last name"), max_length=50, blank=True)
     birthday = models.DateField(_("birth_date"), blank=True, default='1900-01-01')
 
+    email_verified = models.BooleanField(default=False)  # Верификация почты через отправку письма.
+
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = ['username']

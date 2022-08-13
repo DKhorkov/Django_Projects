@@ -1,0 +1,8 @@
+{% extends 'toys/base.html' %}
+
+{% block page_header %}
+<h3>
+    Ваша ссылка некорректна, пожалуйста, авторизуйтесь снова:
+    <a href="{% url 'users:login' %}">Авторизация</a>
+</h3>
+{% endblock page_header %}

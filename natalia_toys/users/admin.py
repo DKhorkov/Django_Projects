@@ -12,7 +12,7 @@ User = get_user_model()
 class UserAdmin(UserAdmin):
     """Доработка создания пользователя внутри админки.
     Если не использовать код ниже, то в админке будет стандартная модель пользователя."""
-    add_form = UserCreationForm
+    add_form = UserCreationForm  # Название переменной формы должно быть именно таким (см. базовую модель админа)
     add_fieldsets = (
         (
             None,
