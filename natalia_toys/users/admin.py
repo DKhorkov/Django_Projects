@@ -20,6 +20,7 @@ class UserAdmin(UserAdmin):
                 "classes": ("wide",),
                 "fields": ("username",
                            "email",
+                           "email_verified",
                            "phone",
                            "first_name",
                            "last_name",

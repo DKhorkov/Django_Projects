@@ -24,6 +24,7 @@ urlpatterns = [
     path('cart/', include('cart.urls')),
     path('', include('toys.urls')),
     path('', include('django.contrib.auth.urls')),  # Необходимо для корректной работы сброса пароля.
+    path('users/', include('allauth.urls'))
 ]
 
 if settings.DEBUG:

@@ -1,0 +1,24 @@
+{% extends "socialaccount/base.html" %}
+{% load i18n %}
+{% load bootstrap4 %}
+
+{% block head_title %}{% trans "Sign In" %}{% endblock %}
+
+{% block content %}
+{% if process == "connect" %}
+<h1>{% blocktrans with provider.name as provider %}Connect {{ provider }}{% endblocktrans %}</h1>
+
+<p>{% blocktrans with provider.name as provider %}You are about to connect a new third party account from {{ provider }}.{% endblocktrans %}</p>
+{% else %}
+<h1>{% blocktrans with provider.name as provider %}Авторизация с помощью {{ provider }}{% endblocktrans %}</h1>
+
+<p>{% blocktrans with provider.name as provider %}
+  Вы успешно авторизовались с помощью социальной сети "{{ provider }}"!
+  {% endblocktrans %}</p>
+{% endif %}
+
+<form class="form" method="post">
+  {% csrf_token %}
+  <button type="submit" class="btn btn-outline-success">Продолжить</button>
+</form>
+{% endblock %}

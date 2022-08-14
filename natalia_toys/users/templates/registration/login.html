@@ -7,6 +7,7 @@
 <body>
 {% extends 'toys/base.html' %}
 {% load bootstrap4 %}
+{% load account socialaccount %}
 
 {% block page_header %}
     <h1 class="display-6">Авторизация пользователя:</h1>
@@ -23,6 +24,14 @@
       <!-- Ниже создан редирект на каталог игрушек после авторизации пользователя-->
       <input type="hidden" name="next" value="{% url 'toys:toys' %}" />
   </form>
+
+
+    {% get_providers as socialaccount_providers %}
+
+    {% if socialaccount_providers %}
+        {% include "socialaccount/snippets/provider_list.html" with process="login" %}
+    {% endif %}
+
 <a href="{% url 'users:password_reset' %}">Забыли пароль?</a>
 {% endblock content %}
 </body>

@@ -32,7 +32,7 @@ class EmailVerify(View):
         if user is not None and default_token_generator.check_token(user, token):
             user.email_verified = True
             user.save()
-            login(request, user)
+            login(request, user, backend='django.contrib.auth.backends.ModelBackend')
             return redirect('users:registration_complete')
         return redirect('users:invalid_verify')
 
@@ -93,7 +93,7 @@ def profile(request):
         user_form = UpdateUserForm(instance=user, data=request.POST)
         if user_form.is_valid():
             new_user = user_form.save()
-            login(request, new_user)
+            login(request, new_user, backend='django.contrib.auth.backends.ModelBackend')
             return redirect('users:profile_changed')
 
     context = {'user_form': user_form}
@@ -111,7 +111,7 @@ def change_password(request):
         form = PasswordChangeForm(user, data=request.POST)
         if form.is_valid():
             new_user = form.save()
-            login(request, new_user)
+            login(request, new_user, backend='django.contrib.auth.backends.ModelBackend')
             return redirect('users:password_changed')
 
     context = {'form': form}

@@ -36,6 +36,10 @@ INSTALLED_APPS = [
 
     # Сторонние приложения:
     'bootstrap4',
+    'allauth',
+    'allauth.account',
+    'allauth.socialaccount',
+    'allauth.socialaccount.providers.vk',
 
 
     # Приложения по умолчанию:
@@ -45,6 +49,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django.contrib.sites',
 ]
 
 MIDDLEWARE = [
@@ -148,4 +153,15 @@ EMAIL_USE_SSL = True
 DEFAULT_FROM_EMAIL = 'NataliaToys@yandex.ru'
 
 # Формат даты для дней рождения в форме регистрации пользователя:
-DATE_INPUT_FORMATS = ['%d-%m-%Y']
+DATE_INPUT_FORMATS = ['%d.%m.%Y']
+
+SITE_ID = 1
+
+AUTHENTICATION_BACKENDS = (
+    'django.contrib.auth.backends.ModelBackend',
+    'allauth.account.auth_backends.AuthenticationBackend',
+)
+
+LOGIN_REDIRECT_URL = "/"
+
+ACCOUNT_ADAPTER = 'users.my_adapter.MyAdapter'  # Переписали адаптер, чтобы корректно авторизоваться через ВК.

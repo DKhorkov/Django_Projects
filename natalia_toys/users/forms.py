@@ -21,7 +21,7 @@ class UserCreationForm(DjangoUserCreationForm):
     phone = forms.CharField(label=_('Номер телефона'), max_length=11, required=True)
     first_name = forms.CharField(max_length=30, label=_("Имя"))
     last_name = forms.CharField(max_length=30, label=_('Фамилия'))
-    birthday = forms.DateField(label=_('Дата рождения в формате "день-месяц-год"'), input_formats=DATE_INPUT_FORMATS)
+    birthday = forms.DateField(label=_('Дата рождения в формате "день.месяц.год"'), input_formats=DATE_INPUT_FORMATS)
 
     class Meta(DjangoUserCreationForm.Meta):
         model = User
