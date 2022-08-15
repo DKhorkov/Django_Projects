@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'allauth.account',
     'allauth.socialaccount',
     'allauth.socialaccount.providers.vk',
+    'allauth.socialaccount.providers.google',
 
 
     # Приложения по умолчанию:
@@ -78,6 +79,9 @@ TEMPLATES = [
 
                 # Мои контекстные процессоры:
                 'cart.context_processors.cart',
+
+                # Сторонние контекстные процессоры:
+                'django.template.context_processors.request',
             ],
         },
     },
@@ -165,3 +169,25 @@ AUTHENTICATION_BACKENDS = (
 LOGIN_REDIRECT_URL = "/"
 
 ACCOUNT_ADAPTER = 'users.my_adapter.MyAdapter'  # Переписали адаптер, чтобы корректно авторизоваться через ВК.
+
+# Внесены изменения, чтобы автоматически сохранялась почта пользователя:
+SOCIALACCOUNT_PROVIDERS = {
+    'google': {
+        'SCOPE': [
+            'profile',
+            'email',
+        ],
+        'AUTH_PARAMS': {
+            'access_type': 'online',
+        }
+    },
+    'vk': {
+        'SCOPE': [
+            'profile',
+            'email',
+        ],
+        'AUTH_PARAMS': {
+            'access_type': 'online',
+        }
+    }
+}
