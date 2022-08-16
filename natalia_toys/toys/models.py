@@ -6,10 +6,10 @@ from PIL import Image
 
 class Toy(models.Model):
     """Класс для представления модели одной игрушки."""
-    title = models.CharField(max_length=50, help_text='Название игрушки')
-    price = models.DecimalField(max_digits=10, decimal_places=2, help_text='Цена игрушки')
+    title = models.CharField(max_length=50, help_text='Название игрушки', verbose_name="Название")
+    price = models.DecimalField(max_digits=10, decimal_places=2, help_text='Цена игрушки', verbose_name="Цена")
     date_added = models.DateTimeField(auto_now_add=True)
-    description = models.TextField(blank=True, help_text='Описание игрушки')
+    description = models.TextField(blank=True, help_text='Описание игрушки', verbose_name="Описание")
     image_1 = models.ImageField(upload_to='images/', blank=True, help_text='Изображений 1')
     image_2 = models.ImageField(upload_to='images/', blank=True, help_text='Изображений 2')
     image_3 = models.ImageField(upload_to='images/', blank=True, help_text='Изображений 3')

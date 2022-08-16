@@ -41,6 +41,8 @@ INSTALLED_APPS = [
     'allauth.socialaccount',
     'allauth.socialaccount.providers.vk',
     'allauth.socialaccount.providers.google',
+    'django_filters',
+    'bootstrapform',
 
 
     # Приложения по умолчанию:

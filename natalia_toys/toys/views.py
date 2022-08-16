@@ -2,12 +2,12 @@ import os
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 from django.http import Http404
+from django.views.generic import ListView
 
 from .models import Toy
 from .forms import ToyForm
 from cart.forms import CartAddToyForm
-
-# Create your views here.
+from .filters import ToysFilter
 
 
 def check_owner(request):
@@ -21,12 +21,15 @@ def main_page(request):
     return render(request, 'toys/main_page.html')
 
 
-def toys(request):
-    """Страница с каталогом игрушек"""
-    toys = Toy.objects.all()
-    cart_toy_form = CartAddToyForm()
-    context = {'toys': toys, 'cart_toy_form': cart_toy_form}
-    return render(request, 'toys/toys.html', context)
+class Toys(ListView):
+    """Страница с каталогом игрушек и поиском по игрушкам с помощью фильтра."""
+    model = Toy
+    template_name = 'toys/toys.html'
+
+    def get_context_data(self, *, object_list=None, **kwargs):
+        context = super().get_context_data()
+        context['filter'] = ToysFilter(self.request.GET, queryset=self.get_queryset())
+        return context
 
 
 def toy_info(request, toy_id):

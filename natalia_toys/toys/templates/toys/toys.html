@@ -7,37 +7,34 @@
 <body>
 
 {% extends 'toys/base.html' %}
+{% load bootstrap %}
 
 {% block content %}
 
 {% if user.username == 'NGuliaeva' or user.username == 'admin' %}
     <a href="{% url 'toys:new_toy' %}">Добавить игрушку в каталог</a>
 {% endif %}
+
+<form method="get">
+    {{ filter.form|bootstrap }}
+    <button type="submit" class="btn btn-primary">Поиск</button>
+</form>
+
 <ul>
-        {% for toy in toys %}
+        {% for toy in filter.qs %}
             {% if not user.username == 'NGuliaeva' %}
                  {% if not user.username == 'admin' %}
                     {% if toy.is_available %}
                         <p><b>Название:</b> {{ toy.title|linebreaks }}</p>
-                        <a href="{% url 'toys:toy_info' toy.id %}">Подробнее</a>
-                        {% if user.username == 'NGuliaeva' or user.username == 'admin' %}
-                            <a href="{% url 'toys:edit_toy' toy.id %}">Редактировать</a>
-                            <a href="{% url 'toys:delete_toy' toy.id %}">Удалить</a>
-                        {% endif %}
                         <p><b>Цена:</b> {{ toy.price}} руб.</p>
 
                         {% if toy.image_1 %}
                             <p><img src="{{ toy.image_1.url }}"></p>
                         {% endif %}
-                        <form action="{% url 'cart:cart_add' toy.id %}" method="post">
-                            {{ cart_toy_form }}
-                            {% csrf_token %}
-                            <input type="submit" value="Добавить в корзину">
-                        </form>
+                        <a class="btn btn-warning" href="{% url 'toys:toy_info' toy.id %}">Подробнее</a>
                     {% endif %}
                 {% else %}
                     <p><b>Название:</b> {{ toy.title|linebreaks }}</p>
-                    <a href="{% url 'toys:toy_info' toy.id %}">Подробнее</a>
                     {% if user.username == 'NGuliaeva' or user.username == 'admin' %}
                         <a href="{% url 'toys:edit_toy' toy.id %}">Редактировать</a>
                         <a href="{% url 'toys:delete_toy' toy.id %}">Удалить</a>
@@ -47,15 +44,10 @@
                     {% if toy.image_1 %}
                         <p><img src="{{ toy.image_1.url }}"></p>
                     {% endif %}
-                    <form action="{% url 'cart:cart_add' toy.id %}" method="post">
-                        {{ cart_toy_form }}
-                        {% csrf_token %}
-                        <input type="submit" value="Добавить в корзину">
-                    </form>
+                    <a class="btn btn-warning" href="{% url 'toys:toy_info' toy.id %}">Подробнее</a>
                 {% endif %}
             {% else %}
                 <p><b>Название:</b> {{ toy.title|linebreaks }}</p>
-                <a href="{% url 'toys:toy_info' toy.id %}">Подробнее</a>
                 {% if user.username == 'NGuliaeva' or user.username == 'admin' %}
                     <a href="{% url 'toys:edit_toy' toy.id %}">Редактировать</a>
                     <a href="{% url 'toys:delete_toy' toy.id %}">Удалить</a>
@@ -65,14 +57,10 @@
                 {% if toy.image_1 %}
                     <p><img src="{{ toy.image_1.url }}"></p>
                 {% endif %}
-                <form action="{% url 'cart:cart_add' toy.id %}" method="post">
-                    {{ cart_toy_form }}
-                    {% csrf_token %}
-                    <input type="submit" value="Добавить в корзину">
-                </form>
+                <a class="btn btn-warning" href="{% url 'toys:toy_info' toy.id %}">Подробнее</a>
             {% endif %}
         {% empty %}
-            <li><h5>No toys were added yet.</h5></li>
+            <li><h5>Нет игрушек, удовлетворяющих выбранные критерии!</h5></li>
         {% endfor %}
     </ul>
 {% endblock content %}
