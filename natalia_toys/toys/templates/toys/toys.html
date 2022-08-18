@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="ru">
 <head>
@@ -7,12 +8,21 @@
 <body>
 
 {% extends 'toys/base.html' %}
+{% load static %}
 {% load bootstrap %}
+
+{% block css_templates %}
+    <link rel="stylesheet" href="{% static 'css/stylesheet.css'%}">
+{% endblock %}
+
+{% block page_header %}
+<h1 class="display-2">Каталог игрушек</h1>
+{% endblock page_header %}
 
 {% block content %}
 
 {% if user.username == 'NGuliaeva' or user.username == 'admin' %}
-    <a href="{% url 'toys:new_toy' %}">Добавить игрушку в каталог</a>
+    <a class="btn btn-outline-info" href="{% url 'toys:new_toy' %}">Добавить игрушку в каталог</a>
 {% endif %}
 
 <form method="get">
@@ -22,16 +32,21 @@
 
 <ul>
         {% for toy in filter.qs %}
+            <div class="container mv-3 mb-2 border-bottom">
             {% if not user.username == 'NGuliaeva' %}
                  {% if not user.username == 'admin' %}
                     {% if toy.is_available %}
-                        <p><b>Название:</b> {{ toy.title|linebreaks }}</p>
+                    <div class="card header" style="background-color: #50bcf2; color: #2c5469">
+                        <h5 class="center"> {{ toy.title|linebreaks }}</h5>
+                    </div>
+                    <div class="card-body" style="background-color: #e4eaed">
                         <p><b>Цена:</b> {{ toy.price}} руб.</p>
 
                         {% if toy.image_1 %}
                             <p><img src="{{ toy.image_1.url }}"></p>
                         {% endif %}
                         <a class="btn btn-warning" href="{% url 'toys:toy_info' toy.id %}">Подробнее</a>
+                    </div>
                     {% endif %}
                 {% else %}
                     <p><b>Название:</b> {{ toy.title|linebreaks }}</p>
@@ -46,6 +61,7 @@
                     {% endif %}
                     <a class="btn btn-warning" href="{% url 'toys:toy_info' toy.id %}">Подробнее</a>
                 {% endif %}
+            </div>
             {% else %}
                 <p><b>Название:</b> {{ toy.title|linebreaks }}</p>
                 {% if user.username == 'NGuliaeva' or user.username == 'admin' %}
@@ -63,7 +79,9 @@
             <li><h5>Нет игрушек, удовлетворяющих выбранные критерии!</h5></li>
         {% endfor %}
     </ul>
+
 {% endblock content %}
+
 
 </body>
 </html>

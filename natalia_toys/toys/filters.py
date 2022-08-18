@@ -13,7 +13,7 @@ class ToysFilter(django_filters.FilterSet):
     class Meta:
         model = Toy
         # Только имеющиеся названия, описания и цены в диапазоне:
-        fields = {'title': ['icontains'], 'price': ['lt', 'gt'], 'description': ['icontains']}
+        fields = {'title': ['icontains'], 'price': ['gte', 'lte'], 'description': ['icontains']}
 
     def filter_by_order(self, queryset, name, users_choice):
         """Фильтрация всех игрушек в возрастающем или уменьшающем порядке по цене."""

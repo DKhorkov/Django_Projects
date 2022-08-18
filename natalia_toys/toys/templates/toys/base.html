@@ -1,4 +1,5 @@
 {% load bootstrap4 %}
+{% load static %}
 
 <!DOCTYPE html>
 <html lang="ru">
@@ -6,60 +7,86 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Natalia Toys</title>
-
+    <link rel="stylesheet" href="{% static 'css/base.css'%}">
+    {% block css_templates %}{% endblock %}
     {% bootstrap_css %}
     {% bootstrap_javascript %}
 </head>
+
 <body>
- <nav class="navbar navbar-expand-mb navbar-light bg-light mb-4 border">
-
-        <a class="navbar-brand" href="{% url 'toys:main_page' %}">Главная страница</a>
-        <a class="navbar-text" href="{% url 'toys:toys' %}">Каталог игрушек</a>
-        <a class="navbar-text" href="{% url 'toys:contacts' %}">Контактная информация</a>
-
-        <div class="cart">
-            {% with total_items=cart|length %}
-            {% if cart|length > 0 %}
-            <a class="btn btn-warning" href="{% url 'cart:cart_detail' %}">
-                                В корзине {{ total_items}} шт. на стоимость {{ cart.get_total_price }} руб. </a>
-            {% else %}
-                <a class="btn btn-warning" href="{% url 'cart:cart_detail' %}"> Корзина пустая </a>
-            {% endif%}
-            {% endwith %}
-        </div>
-
-        <div class="navbar-nav ml-auto">
-            <ul class="navbar-nav mr-auto">
-                {% if user.is_authenticated %}
-                    <li class="nav-item">
-                        <span class="navbar-text">Hello, {{ user.username }}!</span>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="{% url 'users:profile' %}">Профиль</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="{% url 'users:logout' %}">Log out</a>
-                    </li>
+<nav class="navbar navbar-expand-lg bg-dark">
+  <div class="container-fluid">
+    <a class="navbar-brand" style="color: white" href="{% url 'toys:main_page' %}">Главная страница</a>
+    <div class="collapse navbar-collapse" id="navbarNav">
+      <ul class="navbar-nav">
+        <li class="nav-item">
+          <a class="nav-link active" style="color: white" aria-current="page" href="{% url 'toys:toys' %}">Каталог игрушек</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" style="color: white" href="{% url 'toys:contacts' %}">Контактная информация</a>
+        </li>
+      </ul>
+    </div>
+      <div class="navbar-nav ml-auto">
+          <ul class="nav">
+              {% if user.is_authenticated %}
+              <ul>
+                  <li class="nav-item">
+                      <span class="nav-text" style="color: white">Добро пожаловать, {{ user.username }}  .</span>
+                  </li>
+              </ul>
+              {% endif %}
+          </ul>
+      </div>
+      <div class="cart justify-content-center">
+            <ul class="nav justify-content-center">
+                {% with total_items=cart|length %}
+                {% if cart|length > 0 %}
+                <a class="btn btn-warning" href="{% url 'cart:cart_detail' %}">
+                    В корзине {{ total_items}} шт. на стоимость {{ cart.get_total_price }} руб. </a>
                 {% else %}
-                    <li class="nav-item">
-                        <a class="nav-link" href="{% url 'users:login' %}">Log in</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="{% url 'users:register' %}">Registration</a>
-                    </li>
-                {% endif %}
+                <a class="btn btn-warning" href="{% url 'cart:cart_detail' %}"> Корзина пустая </a>
+                {% endif%}
+                {% endwith %}
             </ul>
         </div>
-    </nav>
+  </div>
+    <div class="navbar-nav ml-auto">
+        <ul class="nav">
+            {% if user.is_authenticated %}
+            <ul>
+                <li class="nav-item">
+                    <a class="btn btn-outline-info" style="color: white" href="{% url 'users:profile' %}">Профиль</a>
+                </li>
+                <li class="nav-item">
+                    <a class="btn btn-outline-danger" style="color: white" href="{% url 'users:logout' %}">Выйти</a>
+                </li>
+            </ul>
+            {% else %}
+            <ul>
+                <li class="nav-item">
+                    <a class="btn btn-outline-success" style="color: white" href="{% url 'users:login' %}">Войти</a>
+                </li>
+                <li class="nav-item">
+                    <a class="btn btn-outline-secondary" style="color: white" href="{% url 'users:register' %}">Регистрация</a>
+                </li>
+            </ul>
+            {% endif %}
+        </ul>
+    </div>
+</nav>
 
-    <main role="main" class="container">
-        <div class="pb-2 mb-2 border-bottom">
-            {% block page_header %}{% endblock page_header %}
-        </div>
-        <div>
-            {% block content %}{% endblock content %}
-        </div>
-    </main>
+
+<main role="main" class="container">
+    <div class="pb-2 mb-2 border-bottom">
+        {% block page_header %}{% endblock page_header %}
+    </div>
+    <div>
+        {% block content %}{% endblock content %}
+        <footer class="footer">Все права защищены</footer>
+    </div>
+</main>
+
 
 </body>
 </html>

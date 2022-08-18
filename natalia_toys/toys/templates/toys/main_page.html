@@ -6,11 +6,21 @@
 </head>
 <body>
 {% extends 'toys/base.html' %}
+{% load static %}
 
-{% block content %}
-Here will be logo
+{% block css_templates %}
+    <link rel="stylesheet" href="{% static 'css/stylesheet.css'%}" type="text/css">
+{% endblock %}
 
-{% endblock content %}
+{% block page_header %}
+<div class="jumbotron">
+    <h1 class="display-4" align="center">Магазин авторских игрушек Наталии Гуляевой</h1>
+    <h2 align="center">Переходите в <a class="btn btn-lg btn-success" href="{% url 'toys:toys' %}">Каталог &raquo</a>
+        для просмотра игрушек!</h2>
+</div>
+{% endblock page_header %}
+
+{% block content %} {% endblock content %}
 
 
 </body>
