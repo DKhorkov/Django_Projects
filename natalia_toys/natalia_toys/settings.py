@@ -33,6 +33,7 @@ INSTALLED_APPS = [
     'toys',
     'users',
     'cart',  # Корзина с игрушками.
+    'payment',
 
     # Сторонние приложения:
     'bootstrap4',
@@ -43,6 +44,7 @@ INSTALLED_APPS = [
     'allauth.socialaccount.providers.google',
     'django_filters',
     'bootstrapform',
+    'django_extensions',
 
 
     # Приложения по умолчанию:

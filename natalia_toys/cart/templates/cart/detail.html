@@ -56,12 +56,11 @@
       </tr>
     </tbody>
   </table>
+  {% if cart.get_total_price != 0 %}
   <p class="text-right">
-
-    <!-- Необходимо будет сделать возможность оформления заказа.-->
-    <a href="#" class="button">Оформить заказ</a>
-
+    <a href="{% url 'payment:basket' %}" class="btn btn-outline-success">Оформить заказ</a>
   </p>
+  {% endif %}
 {% endblock %}
 
 </body>

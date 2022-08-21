@@ -22,9 +22,10 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('users/', include('users.urls')),
     path('cart/', include('cart.urls')),
+    path('payment/', include('payment.urls')),
     path('', include('toys.urls')),
     path('', include('django.contrib.auth.urls')),  # Необходимо для корректной работы сброса пароля.
-    path('users/', include('allauth.urls'))
+    path('users/', include('allauth.urls')),
 ]
 
 if settings.DEBUG:
