@@ -7,9 +7,14 @@
 <body>
 
 {% extends 'toys/base.html' %}
+{% load static %}
+
+{% block css_templates %}
+    <link rel="stylesheet" href="{% static 'css/stylesheet.css'%}">
+{% endblock %}
 
 {% block page_header %}
-    <p align="center">Контактная информация для связи</p>
+    <h1 align="center">Контактная информация для связи</h1>
 {% endblock page_header %}
 
 {% block content %}

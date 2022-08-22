@@ -7,6 +7,11 @@
 <body>
 {% extends 'toys/base.html' %}
 {% load bootstrap4 %}
+{% load static %}
+
+{% block css_templates %}
+    <link rel="stylesheet" href="{% static 'css/stylesheet.css'%}">
+{% endblock %}
 
 {% block page_header %}
     <h5 class="display-3"><small>Редактировать данные об игрушке "{{ toy.title }}":</small></h5>

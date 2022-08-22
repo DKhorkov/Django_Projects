@@ -6,6 +6,11 @@
 </head>
 <body>
 {% extends 'toys/base.html' %}
+{% load static %}
+
+{% block css_templates %}
+    <link rel="stylesheet" href="{% static 'css/stylesheet.css'%}">
+{% endblock %}
 
 {% block content %}
 <a href="{% url 'toys:toys' %}">Вернуться в каталог игрушек</a>
