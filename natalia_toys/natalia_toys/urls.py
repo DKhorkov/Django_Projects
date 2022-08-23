@@ -26,6 +26,7 @@ urlpatterns = [
     path('', include('toys.urls')),
     path('', include('django.contrib.auth.urls')),  # Необходимо для корректной работы сброса пароля.
     path('users/', include('allauth.urls')),
+    path('orders/', include('orders.urls')),
 ]
 
 if settings.DEBUG:

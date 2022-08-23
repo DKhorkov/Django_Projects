@@ -5,5 +5,5 @@ from . import views
 app_name = 'payment'
 
 urlpatterns = [
-    path('', views.basket_view, name='basket')
+    path('', views.yandex_payment, name='yandex_payment')
 ]

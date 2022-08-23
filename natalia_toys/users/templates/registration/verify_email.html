@@ -1,8 +1,8 @@
 {% autoescape off %}
 
-Здравствуйте,{{ user.get_username }},
+Здравствуйте,{{ user.username }},
 Пожалуйста перейдите по ссылке ниже для завершения регистрации:
-{{ protocol }}://{{ domain }}{% url 'users:verify_email' uidb64=uid token=token %}
+https://{{ domain }}{% url 'users:verify_email' uidb64=uid token=token %}
 
 Если это не Вы пытаетесь зарегистрироваться на нашем сайте, используя данный адрес электронной почты,
 пожалуйста, игнорируйте данное сообщение!

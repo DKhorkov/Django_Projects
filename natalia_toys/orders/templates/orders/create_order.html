@@ -1,0 +1,32 @@
+{% extends 'toys/base.html' %}
+{% load bootstrap4 %}
+{% load static %}
+
+
+{% block css_templates %}
+    <link rel="stylesheet" href="{% static 'css/stylesheet.css'%}">
+{% endblock %}
+
+{% block page_header %}<h1 class="display-2">Оформление заказа</h1>{% endblock page_header %}
+
+{% block content %}
+    <div class="order-info">
+        <h3>Ваш заказ</h3>
+        <ul>
+            {% for item in cart %}
+                <li>
+                    {{ item.toy }} - {{ item.quantity }} шт. по цене {{ item.price }} руб.
+                    <span>Сумма по данной номенклатуре {{ item.total_price }} руб.</span>
+                </li>
+            {% endfor %}
+        </ul>
+        <p>Итого: {{ cart.get_total_price }} руб.</p>
+    </div>
+    <form action="{% url 'orders:create_order' %}" method="post" class="order-form">
+        {% bootstrap_form form %}
+        {% csrf_token %}
+        <button name="submit" class="btn btn-outline-success">Оплатить заказ</button>
+    </form>
+<!--<a class="btn -bnt-outline-info" href="{% url 'payment:yandex_payment">Оплатить заказ</a>-->
+{% endblock content %}
+

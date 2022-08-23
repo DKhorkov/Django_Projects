@@ -63,7 +63,7 @@
   </table>
   {% if cart.get_total_price != 0 %}
   <p class="text-right">
-    <a href="{% url 'payment:basket' %}" class="btn btn-outline-success">Оформить заказ</a>
+    <a href="{% url 'orders:create_order' %}" class="btn btn-outline-success">Оформить заказ</a>
   </p>
   {% endif %}
 {% endblock %}

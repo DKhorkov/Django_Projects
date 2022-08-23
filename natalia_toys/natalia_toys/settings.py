@@ -34,6 +34,7 @@ INSTALLED_APPS = [
     'users',
     'cart',  # Корзина с игрушками.
     'payment',
+    'orders',
 
     # Сторонние приложения:
     'bootstrap4',
