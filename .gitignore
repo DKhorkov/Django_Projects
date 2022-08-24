@@ -20,3 +20,7 @@
 /natalia_toys/payment/migrations/__pycache__/
 /natalia_toys/orders/__pycache__/
 /natalia_toys/orders/migrations/__pycache__/
+natalia_toys/media/
+natalia_toys/orders/migrations/
+natalia_toys/toys/migrations/
+natalia_toys/users/migrations/

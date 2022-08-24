@@ -1,11 +1,13 @@
 from django.db import models
+from django.conf import settings
 
 from toys.models import Toy
-from users.models import User
 
 
 class Order(models.Model):
-    user_id = models.ForeignKey(User, on_delete=models.DO_NOTHING, null=True)
+    #  Чтобы работал внешний ключ на пользователя, нужно создавать его именно таким образом, а не через импорт модели:
+    user_id = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.DO_NOTHING, null=True)
+
     first_name = models.CharField(max_length=50, verbose_name='Имя')
     last_name = models.CharField(max_length=50, verbose_name='Фамилия')
     email = models.EmailField()
