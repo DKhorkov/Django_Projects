@@ -49,8 +49,11 @@
                 {% endif%}
                 {% endwith %}
             </ul>
-        </div>
-  </div>
+      </div>
+      <div>
+          <a href="{% url 'orders:orders_history' %}" class="btn btn-info">История заказов</a>
+      </div>
+    </div>
     <div class="navbar-nav ml-auto">
         <ul class="nav">
             {% if user.is_authenticated %}

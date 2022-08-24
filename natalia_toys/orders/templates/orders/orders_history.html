@@ -1,0 +1,45 @@
+{% extends 'toys/base.html' %}
+{% load bootstrap4 %}
+{% load static %}
+
+
+{% block css_templates %}
+    <link rel="stylesheet" href="{% static 'css/stylesheet.css'%}">
+{% endblock %}
+
+{% block page_header %}
+<h1 class="display-4">История заказов пользователя {{ user.username }}</h1>
+{% endblock page_header %}
+
+{% block content %}
+
+{% for order in orders %}
+    <div class="container mv-3 mb-2 border-bottom">
+        <div class="card header" style="background-color: #50bcf2; color: #2c5469">
+            <h5 class="center"> Заказ номер {{ order.id }}</h5>
+            {% if order.paid %}
+                <p align="center">Статус: <i style="color: green">оплачен</i></p>
+            {% else %}
+                <p align="center" >Статус: <i style="color: red">не оплачен</i></p>
+            {% endif %}
+        </div>
+        <div class="card-body" style="background-color: #e4eaed">
+            {% for item in order_items %}
+                {% if item.order == order %}
+                    <ul>
+                        <p align="center"><img src="{{ item.toy.image_1.url }}"></p>
+                        <p align="center">Название игрушки: {{ item.toy.title }}</p>
+                        <p align="center">Цена: {{ item.price }} руб.</p>
+                        <p align="center">Количество: {{ item.quantity }} руб.</p>
+                        <p align="center"><b>Сумма по данной номенклатуре: {{ item.get_cost }} руб.</b></p>
+                    </ul>
+                {% endif %}
+            {% endfor %}
+        </div>
+        <big><p align="center" style="background-color: #e4eaed">
+            <b>Итого сумма заказа: {{ order.get_total_cost }} руб.</b></p></big>
+    </div>
+{% empty %}
+    <p>Вы еще не совершали покупок.</p>
+{% endfor %}
+{% endblock content %}
