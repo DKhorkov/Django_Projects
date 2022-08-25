@@ -1,0 +1,18 @@
+{% extends 'toys/base.html' %}
+{% load bootstrap4 %}
+{% load static %}
+
+
+{% block css_templates %}
+    <link rel="stylesheet" href="{% static 'css/stylesheet.css'%}">
+{% endblock %}
+
+{% block page_header %}
+{% if order.paid %}
+    <h1 class="display-2">Ваш заказ номер {{ order.id }} успешно оплачен!</h1>
+    <p>Для большей информации, пожалуйста, смотрите историю заказов</a>.</p>
+{% else %}
+    <h1 class="display-2">Оплата заказа номер {{ order.id }} не была завершена!</h1>
+    <p>Для большей информации, пожалуйста, смотрите историю заказов</a>.</p>
+{% endif %}
+{% endblock page_header %}

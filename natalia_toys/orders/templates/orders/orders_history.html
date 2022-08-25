@@ -21,6 +21,7 @@
                 <p align="center">Статус: <i style="color: green">оплачен</i></p>
             {% else %}
                 <p align="center" >Статус: <i style="color: red">не оплачен</i></p>
+                <a class="btn btn-success" href="{% url 'payment:pay_order' order.id %}">Оплатить</a>
             {% endif %}
         </div>
         <div class="card-body" style="background-color: #e4eaed">
@@ -30,7 +31,7 @@
                         <p align="center"><img src="{{ item.toy.image_1.url }}"></p>
                         <p align="center">Название игрушки: {{ item.toy.title }}</p>
                         <p align="center">Цена: {{ item.price }} руб.</p>
-                        <p align="center">Количество: {{ item.quantity }} руб.</p>
+                        <p align="center">Количество: {{ item.quantity }} шт.</p>
                         <p align="center"><b>Сумма по данной номенклатуре: {{ item.get_cost }} руб.</b></p>
                     </ul>
                 {% endif %}
