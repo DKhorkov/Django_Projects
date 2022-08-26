@@ -1,0 +1,15 @@
+{% autoescape off %}
+
+Уважаемый {% if user.first_name and user.last_name %}{{ user.first_name }} {{ user.last_name }}{% else %}{{ user.username }}{% endif %}, Ваш заказ №{{ order.id }} был успешно оплачен!
+
+Вами было приобретено {{ order.get_number_of_bought_toys }} шт. игрушек за {{ order.get_total_cost }} рублей.
+Повторно с составом заказа и ценами на приобретенные игрушки вы можете ознакомиться по ссылке ниже:
+https://{{ domain }}{% url "orders:orders_history" %}
+
+Ваш заказ будет отправлен по адресу {{ order.country }}, г.{{ order.city }}, {{ order.address }} в ближайшее время!
+
+Благодарим Вас за покупку и ждем снова!
+
+С наилучшими пожеланиями,
+команда сайта NataliaToys.
+{% endautoescape %}

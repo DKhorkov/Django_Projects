@@ -7,7 +7,8 @@ import requests
 import uuid
 
 from cart.cart import Cart
-from orders.models import Order
+from orders.models import Order, OrderItem
+from .utils import send_cheque, send_notification
 
 
 Configuration.account_id = "935824"
@@ -64,6 +65,7 @@ def pay_order(request, order_id):
 @login_required(login_url='/users/login/')
 def payment_completed(request, order_id):
     order = Order.objects.get(id=order_id)
+    order_items = OrderItem.objects.filter(id=order_id)
     params = {'limit': 100}
     payment_list = Payment.list(params)
     payment_id = ''
@@ -75,6 +77,8 @@ def payment_completed(request, order_id):
     if payment.paid:
         order.paid = True
         order.save()
+        send_notification(request, request.user, order, payment.id)
+        send_cheque(request, request.user, order)
 
     context = {'order': order}
     return render(request, 'payment/payment_completed.html', context=context)

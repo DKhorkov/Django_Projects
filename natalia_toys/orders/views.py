@@ -5,6 +5,7 @@ from yookassa import Payment
 from .models import OrderItem, Order
 from .forms import OrderCreateForm
 from cart.cart import Cart
+from payment.utils import send_cheque, send_notification
 
 
 @login_required(login_url='/users/login/')
@@ -35,19 +36,21 @@ def orders_history(request):
     params = {'limit': 100}
     payment_list = Payment.list(params)
     orders = Order.objects.filter(user_id=request.user)
-    for order in orders:
-        payment_id = ''
-        for item in payment_list.items:
-            if item.description == f"Заказ номер {order.id}":
-                payment_id = item.id
-                print(payment_id)
-                break
-        payment = Payment.find_one(payment_id)
-        if payment.paid:
-            order.paid = True
-            order.save()
-
     order_items = OrderItem.objects.all()
+    for order in orders:
+        if not order.paid:
+            payment_id = ''
+            for item in payment_list.items:
+                if item.description == f"Заказ номер {order.id}":
+                    payment_id = item.id
+                    break
+            payment = Payment.find_one(payment_id)
+            if payment.paid:
+                order.paid = True
+                order.save()
+                send_notification(request, request.user, order, payment.id)
+                send_cheque(request, request.user, order)
+
     context = {'orders': orders, 'order_items': order_items}
     return render(request, 'orders/orders_history.html', context=context)
 

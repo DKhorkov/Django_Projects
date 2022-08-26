@@ -1,0 +1,25 @@
+{% autoescape off %}
+
+Заказ №{{ order.id }} был успешно оплачен пользователем {{ user.username }}!
+
+Информация о пользователе при регистрации/при оформлении заказа:
+  1) id - {{ user.id }}
+  2) логин - {{ user.username }};
+  3) имя - {{ user.first_name }}/ {{ order.first_name }};
+  4) фамилия - {{ user.last_name }}/ {{ order.last_name }};
+  5) email - {{ user.email }}/ {{ order.email }};
+  6) телефон для связи - {{ user.phone }}.
+
+Идентификационный номер платежа на сайте ЮКасса - "{{ payment_id }}". Для ознакомления с подробной информацией, пожалуйста, перейдите по ссылке ниже:
+https://yookassa.ru/my/payments
+
+Пользователем {{ user.username }} было приобретено {{ order.get_number_of_bought_toys }} шт. игрушек за {{ order.get_total_cost }} рублей.
+
+Заказ необходимо отправить по адресу {{ order.country }}, г.{{ order.city }}, {{ order.address }} в ближайшее время!
+
+Для ознакомления с игрушками, которые необходимо отправить пользователю, пожалуйста, перейдите по ссылке ниже:
+https://{{ domain }}/admin
+
+С наилучшими пожеланиями,
+команда сайта NataliaToys.
+{% endautoescape %}
