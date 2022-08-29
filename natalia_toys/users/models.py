@@ -4,7 +4,8 @@ from django.utils.translation import gettext_lazy as _
 
 
 class User(AbstractUser):
-    """"""
+    """Модель пользователя, наследуемая от "AbstractUser", но с дополнительными полями номера телефона, дня рождения
+    и подтверждением адреса электронной почты, который является username-мом."""
     email = models.EmailField(
         _('email address'),
         unique=True,

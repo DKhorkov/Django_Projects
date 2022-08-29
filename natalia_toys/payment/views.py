@@ -11,11 +11,19 @@ from orders.models import Order, OrderItem
 from .utils import send_cheque, send_notification
 
 
+# Необходимая конфигурация для правильной работы оплаты через ЮКасса.
+# https://yookassa.ru/developers/payment-acceptance/getting-started/quick-start
 Configuration.account_id = "935824"
 Configuration.secret_key = "test_ijOeXonVYolMY8TuL4a0CJh-inaw33phNeqo-T7Lxtk"
 
 
 def yandex_payment(request, order_id):
+    """Представление оплаты заказа через платежную систему ЮКасса. На вход принимает запрос и идентификационный номер
+    заказа. Далее переменной "cart" присваивается текущая корзина заказов пользователя, чтобы на основе данной
+    переменной посчитать стоимость, которая должна быть списана с банковского счета клиента для оплаты сформированного
+    заказа. Затем с помощью модуля "yookassa" создается объект оплаты и происходит переадресация на платежный шлюз
+    ЮКассы. После оплаты пользователем происходит переадресация на страницу уведомления о том, что заказ оплачен, а
+    корзина очищается."""
     cart = Cart(request)
     order_id = order_id
     total_price = int(cart.get_total_price())
@@ -42,6 +50,10 @@ def yandex_payment(request, order_id):
 
 @login_required(login_url='/users/login/')
 def pay_order(request, order_id):
+    """Представление для оплаты уже созданного заказа, который не был оплачен (оплата была прервана). На вход принимает
+    запрос и номер заказа. Из БД достается необходимый заказ на основе полученного id заказа и считается его стоимость.
+    Затем с помощью модуля "yookassa" создается объект оплаты и происходит переадресация на платежный шлюз
+    ЮКассы. После оплаты пользователем происходит переадресация на страницу уведомления о том, что заказ оплачен."""
     order = Order.objects.get(id=order_id)
     total_price = order.get_total_cost()
 
@@ -64,8 +76,12 @@ def pay_order(request, order_id):
 
 @login_required(login_url='/users/login/')
 def payment_completed(request, order_id):
+    """Представление завершения оплаты. На вход принимает запрос, а также идентификационный номер заказа. По номеру
+    заказа из БД представление получает оплаченный заказ, необходимый для нахождение id оплаты данного заказа через
+    API ЮКасса. Далее идет проверка через API ЮКасса, действительно ли оплачен заказ. Если заказ оплачен, его статус
+    оплаты в БД меняется на True и сохраняется в БД, после чего отправляется на email уведомление об оплате заказа
+    владельцу сайта, а также чек об оплате покупателю."""
     order = Order.objects.get(id=order_id)
-    order_items = OrderItem.objects.filter(id=order_id)
     params = {'limit': 100}
     payment_list = Payment.list(params)
     payment_id = ''
@@ -85,7 +101,7 @@ def payment_completed(request, order_id):
 
 # @login_required(login_url='/users/login/')
 # def basket_view(request):
-#     """Создание оплаты на основе платежной системы stripe."""
+#     """Создание оплаты на основе платежной системы stripe. https://dashboard.stripe.com/test/dashboard"""
 #     basket = Cart(request)
 #     total_price = int(basket.get_total_price())
 #     if total_price != 0:

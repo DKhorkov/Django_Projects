@@ -12,7 +12,8 @@ User = get_user_model()
 
 
 class UserCreationForm(DjangoUserCreationForm):
-    """Измененный класс из-за изменения модели пользователя"""
+    """Форма создания нового пользователя, наследуемая от стандартной формы создания пользователя, но с учетом
+    обновленной модели пользователя (телефон, день рождения, email в качестве логина)."""
     email = forms.EmailField(
         label=_("Email"),
         max_length=254,
@@ -29,6 +30,8 @@ class UserCreationForm(DjangoUserCreationForm):
 
 
 class UpdateUserForm(forms.ModelForm):
+    """Форма обновления профиля пользователя, наследуемая от стандартной формы обновления пользователя, но с учетом
+    обновленной модели пользователя (телефон, день рождения, email в качестве логина)."""
     username = forms.CharField(max_length=100,
                                required=True,
                                widget=forms.TextInput(attrs={'class': 'form-control'}))
@@ -46,6 +49,8 @@ class UpdateUserForm(forms.ModelForm):
 
 
 class AuthenticationForm(DjangoAuthenticationForm):
+    """Обновленная форма аутентификации пользователя, наследуемая от стандартной формы аутентификации пользователя,
+     но с учетом обновленной модели пользователя, когда необходимо обрабатывать email в качестве логина."""
 
     def clean(self):
         """Переписываем метод стандартной формы аутентификации пользователя, чтобы обрабатывалась
