@@ -17,7 +17,7 @@ class MyAdapter(DefaultAccountAdapter):
         if last_name:
             user_field(user, "last_name", last_name)
 
-        # Внесены изменения, чтобы для корректной авторизации через соц.сети:
+        # Внесены изменения для корректной авторизации через соц.сети:
         if email:
             user_field(user, "email", email)
         if username:

@@ -16,6 +16,6 @@ class ToysFilter(django_filters.FilterSet):
         fields = {'title': ['icontains'], 'price': ['gte', 'lte'], 'description': ['icontains']}
 
     def filter_by_order(self, queryset, name, users_choice):
-        """Фильтрация всех игрушек в возрастающем или уменьшающем порядке по цене."""
+        """Метод фильтрации всех игрушек в возрастающем или уменьшающем порядке по цене."""
         expression = 'price' if users_choice == 'ascending' else '-price'
         return queryset.order_by(expression)

@@ -5,7 +5,7 @@ from PIL import Image
 
 
 class Toy(models.Model):
-    """Класс для представления модели одной игрушки."""
+    """Модель игрушки."""
     title = models.CharField(max_length=50, help_text='Название игрушки', verbose_name="Название")
     price = models.DecimalField(max_digits=10, decimal_places=2, help_text='Цена игрушки', verbose_name="Цена")
     date_added = models.DateTimeField(auto_now_add=True)
@@ -21,6 +21,8 @@ class Toy(models.Model):
 
     # Стандартизирует каждое загруженное изображение в превью:
     def save(self):
+        """Метод сохранения изображений в БД. Если изображение было добавлено при создании игрушки, оно будет
+        от масштабировано согласно указанному в атрибуте "output_size" размеру."""
         super().save()
         output_size = (300, 300)
 

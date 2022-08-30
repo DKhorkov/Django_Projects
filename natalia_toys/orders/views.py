@@ -10,6 +10,10 @@ from payment.utils import send_cheque, send_notification
 
 @login_required(login_url='/users/login/')
 def create_order(request):
+    """Представление для формирования заказа пользователя на основе корзины, в которую были добавлены
+    выбранные пользователем игрушки. На вход данное представление принимает запрос, после чего пользователь получает
+    форму для создания заказа. Если форма заполнена корректно, заказ сохраняется в БД, а пользователь переадресовывается
+    на страницу оплаты ЮКасса."""
     cart = Cart(request)
     if request.method == 'POST':
         form = OrderCreateForm(request.POST)
@@ -33,6 +37,10 @@ def create_order(request):
 
 @login_required(login_url='/users/login/')
 def orders_history(request):
+    """Представление для просмотра пользователем его истории заказов. На вход принимает запрос, далее с помощью API
+    ЮКасса проверяется статус всех заказов данного пользователя (если пользователь не вернулся из платежного шлюза
+    ЮКасса, но заказ уже был оплачен, то в рамках просмотра истории заказов, статус оплаченных заказов поменяется на
+    "True" в БД и на странице сайта "история заказов") и выводится информация по заказам."""
     params = {'limit': 100}
     payment_list = Payment.list(params)
     orders = Order.objects.filter(user_id=request.user)
@@ -53,4 +61,3 @@ def orders_history(request):
 
     context = {'orders': orders, 'order_items': order_items}
     return render(request, 'orders/orders_history.html', context=context)
-

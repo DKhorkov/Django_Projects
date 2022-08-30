@@ -5,6 +5,8 @@ from toys.models import Toy
 
 
 class Order(models.Model):
+    """Модель для заказа, который пользователь оформляет, когда выбрал все необходимые игрушки и хочет их приобрести."""
+
     #  Чтобы работал внешний ключ на пользователя, нужно создавать его именно таким образом, а не через импорт модели:
     user_id = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.DO_NOTHING, null=True)
 
@@ -27,13 +29,21 @@ class Order(models.Model):
         return f'Заказ номер {self.id}'
 
     def get_total_cost(self):
+        """Метод для определения общей суммы заказа. Необходим для отправки чека покупателю и уведомления владельцу о
+        размере совершенного покупателем заказа. Также данный метод необходим, если заказ уже был оформлен, но не
+        оплачен: в таком случае, он будет виден для пользователя в истории заказов и пользователь сможет завершить
+        процедуру покупки игрушек (вместо стоимости игрушек в корзине будет использована сумма заказа с помощью этого
+        метода)."""
         return sum(item.get_cost() for item in self.items.all())
 
     def get_number_of_bought_toys(self):
+        """Метод для определения кол-ва игрушек в заказе. Необходим для отправки чека покупателю и уведомления владельцу
+        о количестве приобретенных покупателем игрушек."""
         return sum(item.quantity for item in self.items.all())
 
 
 class OrderItem(models.Model):
+    """Модель для игрушки в заказе, который собирается оформить пользователь."""
     order = models.ForeignKey(Order, related_name='items', on_delete=models.CASCADE)
     toy = models.ForeignKey(Toy, related_name='order_items', on_delete=models.DO_NOTHING)
     price = models.DecimalField(max_digits=10, decimal_places=2)
@@ -43,6 +53,5 @@ class OrderItem(models.Model):
         return f'{self.id}'
 
     def get_cost(self):
+        """Метод для определения стоимости по одной номенклатуре (типу игрушки)."""
         return self.price * self.quantity
-
-
