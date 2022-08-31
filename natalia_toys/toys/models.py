@@ -10,20 +10,20 @@ class Toy(models.Model):
     price = models.DecimalField(max_digits=10, decimal_places=2, help_text='Цена игрушки', verbose_name="Цена")
     date_added = models.DateTimeField(auto_now_add=True)
     description = models.TextField(blank=True, help_text='Описание игрушки', verbose_name="Описание")
-    image_1 = models.ImageField(upload_to='images/', blank=True, help_text='Изображений 1')
-    image_2 = models.ImageField(upload_to='images/', blank=True, help_text='Изображений 2')
-    image_3 = models.ImageField(upload_to='images/', blank=True, help_text='Изображений 3')
-    image_4 = models.ImageField(upload_to='images/', blank=True, help_text='Изображений 4')
+    image_1 = models.ImageField(upload_to='images/', blank=True, help_text='Изображение 1')
+    image_2 = models.ImageField(upload_to='images/', blank=True, help_text='Изображение 2')
+    image_3 = models.ImageField(upload_to='images/', blank=True, help_text='Изображение 3')
+    image_4 = models.ImageField(upload_to='images/', blank=True, help_text='Изображение 4')
     is_available = models.BooleanField(help_text='Имеется в наличии?')
 
     def __str__(self):
         return self.title
 
     # Стандартизирует каждое загруженное изображение в превью:
-    def save(self):
+    def save(self, *args, **kwargs):
         """Метод сохранения изображений в БД. Если изображение было добавлено при создании игрушки, оно будет
-        от масштабировано согласно указанному в атрибуте "output_size" размеру."""
-        super().save()
+        отмасштабировано согласно указанному в атрибуте "output_size" размеру."""
+        super().save(*args, **kwargs)
         output_size = (300, 300)
 
         if self.image_1:
