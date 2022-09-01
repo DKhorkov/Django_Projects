@@ -1,8 +1,9 @@
 from django.test import TestCase
+from django.urls import reverse
 
 from .models import Toy
 from .forms import ToyForm
-from . import views
+from users.models import User
 
 
 class ToyModelTest(TestCase):
@@ -172,3 +173,296 @@ class ToyFormTest(TestCase):
         self.assertEqual(form.fields['image_3'].label, 'Изображение 3')
         self.assertEqual(form.fields['image_4'].label, 'Изображение 4')
         self.assertEqual(form.fields['is_available'].label, 'Имеется в наличии?')
+
+
+# Ниже расположены тесты для представлений.
+class ToysViewTest(TestCase):
+
+    def test_view_url_exists_at_desired_location(self):
+        response = self.client.get('/toys')
+        self.assertEqual(response.status_code, 200)
+
+    def test_view_url_accessible_by_name(self):
+        response = self.client.get('/toys')
+        self.assertEqual(response.status_code, 200)
+
+    def test_view_uses_correct_template(self):
+        response = self.client.get('/toys')
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, 'toys/toys.html')
+
+
+class CheckOwnerViewTest(TestCase):
+
+    def setUp(self):
+        user = User.objects.create(username='test_user', email='someemail@gmail.com')
+
+    def test_http404_raise_if_user_does_not_corresponds(self):
+        user = User.objects.get(id=1)
+        response = self.client.get('check_owner', kwargs={'request.user.username': user.username})
+        self.assertEqual(response.status_code, 404)
+
+
+class MainPageViewTest(TestCase):
+
+    def test_view_url_exists_at_desired_location(self):
+        response = self.client.get('')
+        self.assertEqual(response.status_code, 200)
+
+    def test_view_url_accessible_by_name(self):
+        response = self.client.get(reverse('toys:main_page'))
+        self.assertEqual(response.status_code, 200)
+
+    def test_view_uses_correct_template(self):
+        response = self.client.get(reverse('toys:main_page'))
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, 'toys/main_page.html')
+
+
+class ContactsViewTest(TestCase):
+
+    def test_view_url_exists_at_desired_location(self):
+        response = self.client.get('/contacts')
+        self.assertEqual(response.status_code, 200)
+
+    def test_view_url_accessible_by_name(self):
+        response = self.client.get(reverse('toys:contacts'))
+        self.assertEqual(response.status_code, 200)
+
+    def test_view_uses_correct_template(self):
+        response = self.client.get(reverse('toys:contacts'))
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, 'toys/contacts.html')
+
+
+class ToyInfoViewTest(TestCase):
+
+    def setUp(self):
+        Toy.objects.create(title='elephant', price=100, description='Do u want to buy an elephant?', is_available=False)
+        Toy.objects.create(title='turtle', price=200, is_available=True)
+
+    def test_http404_raise_if_toy_is_not_available(self):
+        toy = Toy.objects.get(id=1)
+        response = self.client.get(reverse('toys:toy_info', kwargs={'toy_id': toy.id}))
+        self.assertEqual(response.status_code, 404)
+
+    def test_view_url_exists_at_desired_location(self):
+        toy = Toy.objects.get(id=2)
+        response = self.client.get(f'/toy_info/{toy.id}')
+        self.assertEqual(response.status_code, 200)
+
+    def test_view_url_accessible_by_name(self):
+        toy = Toy.objects.get(id=2)
+        response = self.client.get(reverse('toys:toy_info', kwargs={'toy_id': toy.id}))
+        self.assertEqual(response.status_code, 200)
+
+    def test_view_uses_correct_template(self):
+        toy = Toy.objects.get(id=2)
+        response = self.client.get(reverse('toys:toy_info', kwargs={'toy_id': toy.id}))
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, 'toys/toy_info.html')
+
+
+class NewToyViewTest(TestCase):
+
+    def setUp(self):
+        admin = User.objects.create(username='admin', email='admin@gmail.com', is_active=True)
+        admin.set_password('some_pswrd1')
+        admin.save()
+        user = User.objects.create(username='random-user', email='some_user@gmail.com', is_active=True)
+        user.set_password('user_pswrd1')
+        user.save()
+
+    def test_view_url_exists_at_desired_location(self):
+        admin = User.objects.get(id=1)
+        login = self.client.login(username='admin@gmail.com', password='some_pswrd1')
+        response = self.client.get('/new_toy')
+        self.assertEqual(response.status_code, 200)
+
+    def test_view_url_accessible_by_name(self):
+        admin = User.objects.get(id=1)
+        login = self.client.login(username='admin@gmail.com', password='some_pswrd1')
+        response = self.client.get(reverse('toys:new_toy'))
+        self.assertEqual(response.status_code, 200)
+
+    def test_view_uses_correct_template(self):
+        admin = User.objects.get(id=1)
+        login = self.client.login(username='admin@gmail.com', password='some_pswrd1')
+        response = self.client.get(reverse('toys:new_toy'))
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, 'toys/new_toy.html')
+
+    def test_valid_form(self):
+        form = ToyForm(data={'title': 'elephant', 'price': 120, 'is_available': True})
+        self.assertTrue(form.is_valid())
+
+    def test_invalid_form(self):
+        form = ToyForm(data={})
+        self.assertFalse(form.is_valid())
+
+    def test_login_user(self):
+        admin = User.objects.get(id=1)
+        login = self.client.login(username='admin@gmail.com', password='some_pswrd1')
+        self.assertTrue(login)
+
+    def test_saving_valid_form_with_post_method(self):
+        admin = User.objects.get(id=1)
+        login = self.client.login(username='admin@gmail.com', password='some_pswrd1')
+        form_data = {'title': 'elephant', 'price': 120}
+        form = ToyForm(data=form_data)
+        response = self.client.post(reverse('toys:new_toy'))
+        self.assertEqual(response.status_code, 200)
+
+    def test_that_created_toy_was_saved(self):
+        number_of_toys = len(Toy.objects.all())
+        form_data = {'title': 'elephant', 'price': 120}
+        form = ToyForm(data=form_data)
+        form.save()
+        number_of_toys = len(Toy.objects.all())
+        self.assertEqual(number_of_toys, 1)
+
+    def test_redirection_after_valid_form_post(self):
+        admin = User.objects.get(id=1)
+        login = self.client.login(username='admin@gmail.com', password='some_pswrd1')
+        form_data = {'title': 'elephant', 'price': 120}
+        form = ToyForm(data=form_data)
+        response = self.client.post(reverse('toys:new_toy'), data=form_data)
+        self.assertRedirects(response, expected_url='/toys')
+
+    def test_raise_http404_if_user_not_correct(self):
+        user = User.objects.get(id=2)
+        login = self.client.login(username='some_user@gmail.com', password='user_pswrd1')
+        form_data = {'title': 'elephant', 'price': 120}
+        form = ToyForm(data=form_data)
+        response = self.client.post(reverse('toys:new_toy'), data=form_data)
+        self.assertEqual(response.status_code, 404)
+
+
+class DeleteToyViewTest(TestCase):
+
+    def setUp(self):
+        admin = User.objects.create(username='admin', email='admin@gmail.com', is_active=True)
+        admin.set_password('some_pswrd1')
+        admin.save()
+        user = User.objects.create(username='random-user', email='some_user@gmail.com', is_active=True)
+        user.set_password('user_pswrd1')
+        user.save()
+        toy = Toy.objects.create(title='elephant', price=120, is_available=True)
+        toy.save()
+
+    def test_view_url_exists_at_desired_location(self):
+        admin = User.objects.get(id=1)
+        login = self.client.login(username='admin@gmail.com', password='some_pswrd1')
+        toy = Toy.objects.get(id=1)
+        response = self.client.get(f'/delete_toy/{toy.id}')
+        self.assertEqual(response.status_code, 302)
+
+    def test_view_url_accessible_by_name(self):
+        admin = User.objects.get(id=1)
+        login = self.client.login(username='admin@gmail.com', password='some_pswrd1')
+        toy = Toy.objects.get(id=1)
+        response = self.client.get(reverse('toys:delete_toy', kwargs={'toy_id': toy.id}))
+        self.assertEqual(response.status_code, 302)
+
+    def test_that_toy_was_deleted(self):
+        admin = User.objects.get(id=1)
+        login = self.client.login(username='admin@gmail.com', password='some_pswrd1')
+        toy = Toy.objects.get(id=1)
+        response = self.client.post(reverse('toys:delete_toy', kwargs={'toy_id': toy.id}))
+        number_of_toys = len(Toy.objects.all())
+        self.assertEqual(number_of_toys, 0)
+
+    def test_raise_http404_if_user_not_correct(self):
+        user = User.objects.get(id=2)
+        login = self.client.login(username='some_user@gmail.com', password='user_pswrd1')
+        toy = Toy.objects.get(id=1)
+        response = self.client.post(reverse('toys:delete_toy', kwargs={'toy_id': toy.id}))
+        self.assertEqual(response.status_code, 404)
+
+
+class EditToyViewTest(TestCase):
+
+    def setUp(self):
+        admin = User.objects.create(username='admin', email='admin@gmail.com', is_active=True)
+        admin.set_password('some_pswrd1')
+        admin.save()
+        user = User.objects.create(username='random-user', email='some_user@gmail.com', is_active=True)
+        user.set_password('user_pswrd1')
+        user.save()
+        toy = Toy.objects.create(title='elephant', price=120, is_available=True)
+        toy.save()
+
+    def test_view_url_exists_at_desired_location(self):
+        admin = User.objects.get(id=1)
+        login = self.client.login(username='admin@gmail.com', password='some_pswrd1')
+        toy = Toy.objects.get(id=1)
+        response = self.client.get(f'/edit_toy/{toy.id}')
+        self.assertEqual(response.status_code, 200)
+
+    def test_view_url_accessible_by_name(self):
+        admin = User.objects.get(id=1)
+        login = self.client.login(username='admin@gmail.com', password='some_pswrd1')
+        toy = Toy.objects.get(id=1)
+        response = self.client.get(reverse('toys:edit_toy', kwargs={'toy_id': toy.id}))
+        self.assertEqual(response.status_code, 200)
+
+    def test_view_uses_correct_template(self):
+        admin = User.objects.get(id=1)
+        login = self.client.login(username='admin@gmail.com', password='some_pswrd1')
+        toy = Toy.objects.get(id=1)
+        response = self.client.get(reverse('toys:edit_toy', kwargs={'toy_id': toy.id}))
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, 'toys/edit_toy.html')
+
+    def test_login_user(self):
+        admin = User.objects.get(id=1)
+        login = self.client.login(username='admin@gmail.com', password='some_pswrd1')
+        self.assertTrue(login)
+
+    def test_saving_form_with_no_changes(self):
+        admin = User.objects.get(id=1)
+        login = self.client.login(username='admin@gmail.com', password='some_pswrd1')
+        toy = Toy.objects.get(id=1)
+        form_data = {'date_added': toy.date_added, 'title': toy.title, 'price': toy.price,
+                     'id': toy.id, 'is_available': toy.is_available}
+        form = ToyForm(data=form_data)
+        self.assertTrue(form.is_valid())
+        response = self.client.post(reverse('toys:edit_toy', kwargs={'toy_id': toy.id}))
+        self.assertEqual(response.status_code, 200)
+
+    def test_saving_edited_toy_with_valid_form(self):
+        admin = User.objects.get(id=1)
+        login = self.client.login(username='admin@gmail.com', password='some_pswrd1')
+        toy = Toy.objects.get(id=1)
+        form_data = {'date_added': toy.date_added, 'title': 'new elephant', 'price': toy.price,
+                     'id': toy.id, 'is_available': False}
+        form = ToyForm(data=form_data)
+        self.assertTrue(form.is_valid())
+        response = self.client.post(reverse('toys:edit_toy', kwargs={'toy_id': toy.id}))
+        self.assertEqual(response.status_code, 200)
+
+    def test_redirect_after_editing_toy_with_valid_form(self):
+        admin = User.objects.get(id=1)
+        login = self.client.login(username='admin@gmail.com', password='some_pswrd1')
+        toy = Toy.objects.get(id=1)
+        form_data = {'date_added': toy.date_added, 'title': 'new elephant', 'price': toy.price,
+                     'id': toy.id, 'is_available': False}
+        form = ToyForm(data=form_data)
+        response = self.client.post(reverse('toys:new_toy'), data=form_data)
+        self.assertRedirects(response, expected_url='/toys')
+
+    def test_invalid_form(self):
+        admin = User.objects.get(id=1)
+        login = self.client.login(username='admin@gmail.com', password='some_pswrd1')
+        toy = Toy.objects.get(id=1)
+        form_data = {'date_added': toy.date_added, 'title': [], 'price': toy.price,
+                     'id': toy.id, 'is_available': False}
+        form = ToyForm(data=form_data)
+        self.assertFalse(form.is_valid())
+
+    def test_raise_http404_if_user_not_correct(self):
+        user = User.objects.get(id=2)
+        login = self.client.login(username='some_user@gmail.com', password='user_pswrd1')
+        toy = Toy.objects.get(id=1)
+        response = self.client.post(reverse('toys:edit_toy', kwargs={'toy_id': toy.id}))
+        self.assertEqual(response.status_code, 404)

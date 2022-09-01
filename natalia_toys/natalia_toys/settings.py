@@ -174,6 +174,7 @@ AUTHENTICATION_BACKENDS = (
     'allauth.account.auth_backends.AuthenticationBackend',
 )
 
+LOGIN_URL = '/users/login/'
 LOGIN_REDIRECT_URL = "/"
 
 ACCOUNT_ADAPTER = 'users.my_adapter.MyAdapter'  # Переписали адаптер, чтобы корректно авторизоваться через ВК.
