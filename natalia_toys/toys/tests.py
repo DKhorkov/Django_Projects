@@ -183,7 +183,7 @@ class ToysViewTest(TestCase):
         self.assertEqual(response.status_code, 200)
 
     def test_view_url_accessible_by_name(self):
-        response = self.client.get('/toys')
+        response = self.client.get(reverse('toys:toys'))
         self.assertEqual(response.status_code, 200)
 
     def test_view_uses_correct_template(self):
@@ -266,10 +266,10 @@ class ToyInfoViewTest(TestCase):
 class NewToyViewTest(TestCase):
 
     def setUp(self):
-        admin = User.objects.create(username='admin', email='admin@gmail.com', is_active=True)
+        admin = User.objects.create(username='admin', email='admin@gmail.com', email_verified=True)
         admin.set_password('some_pswrd1')
         admin.save()
-        user = User.objects.create(username='random-user', email='some_user@gmail.com', is_active=True)
+        user = User.objects.create(username='random-user', email='some_user@gmail.com', email_verified=True)
         user.set_password('user_pswrd1')
         user.save()
 
@@ -341,10 +341,10 @@ class NewToyViewTest(TestCase):
 class DeleteToyViewTest(TestCase):
 
     def setUp(self):
-        admin = User.objects.create(username='admin', email='admin@gmail.com', is_active=True)
+        admin = User.objects.create(username='admin', email='admin@gmail.com', email_verified=True)
         admin.set_password('some_pswrd1')
         admin.save()
-        user = User.objects.create(username='random-user', email='some_user@gmail.com', is_active=True)
+        user = User.objects.create(username='random-user', email='some_user@gmail.com', email_verified=True)
         user.set_password('user_pswrd1')
         user.save()
         toy = Toy.objects.create(title='elephant', price=120, is_available=True)
@@ -383,10 +383,10 @@ class DeleteToyViewTest(TestCase):
 class EditToyViewTest(TestCase):
 
     def setUp(self):
-        admin = User.objects.create(username='admin', email='admin@gmail.com', is_active=True)
+        admin = User.objects.create(username='admin', email='admin@gmail.com', email_verified=True)
         admin.set_password('some_pswrd1')
         admin.save()
-        user = User.objects.create(username='random-user', email='some_user@gmail.com', is_active=True)
+        user = User.objects.create(username='random-user', email='some_user@gmail.com', email_verified=True)
         user.set_password('user_pswrd1')
         user.save()
         toy = Toy.objects.create(title='elephant', price=120, is_available=True)
