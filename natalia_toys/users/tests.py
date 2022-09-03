@@ -292,3 +292,222 @@ class UpdateUserFormTest(TestCase):
         form = UpdateUserForm()
         birthday_input_formats = form.fields['birthday'].input_formats
         self.assertEqual(birthday_input_formats, ['%d.%m.%Y'])
+
+
+# Ниже расположены тесты для представлений.
+class ConfirmEmailViewTest(TestCase):
+
+    def test_view_url_exists_at_desired_location(self):
+        response = self.client.get('/users/confirm_email')
+        self.assertEqual(response.status_code, 200)
+
+    def test_view_url_accessible_by_name(self):
+        response = self.client.get(reverse('users:confirm_email'))
+        self.assertEqual(response.status_code, 200)
+
+    def test_view_uses_correct_template(self):
+        response = self.client.get(reverse('users:confirm_email'))
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, 'registration/confirm_email.html')
+
+
+class InvalidVerifyViewTest(TestCase):
+
+    def test_view_url_exists_at_desired_location(self):
+        response = self.client.get('/users/invalid_verify')
+        self.assertEqual(response.status_code, 200)
+
+    def test_view_url_accessible_by_name(self):
+        response = self.client.get(reverse('users:invalid_verify'))
+        self.assertEqual(response.status_code, 200)
+
+    def test_view_uses_correct_template(self):
+        response = self.client.get(reverse('users:invalid_verify'))
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, 'registration/invalid_verify.html')
+
+
+class RegistrationCompleteViewTest(TestCase):
+
+    def test_view_url_exists_at_desired_location(self):
+        response = self.client.get('/users/registration_complete')
+        self.assertEqual(response.status_code, 200)
+
+    def test_view_url_accessible_by_name(self):
+        response = self.client.get(reverse('users:registration_complete'))
+        self.assertEqual(response.status_code, 200)
+
+    def test_view_uses_correct_template(self):
+        response = self.client.get(reverse('users:registration_complete'))
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, 'registration/registration_complete.html')
+
+
+class PasswordChangedViewTest(TestCase):
+
+    def setUp(self):
+        admin = User.objects.create(username='admin', email='admin@gmail.com', email_verified=True)
+        admin.set_password('some_pswrd1')
+        admin.save()
+
+    def test_view_url_exists_at_desired_location(self):
+        self.client.login(username='admin@gmail.com', password='some_pswrd1')
+        response = self.client.get('/users/password_changed')
+        self.assertEqual(response.status_code, 200)
+
+    def test_view_url_accessible_by_name(self):
+        self.client.login(username='admin@gmail.com', password='some_pswrd1')
+        response = self.client.get(reverse('users:password_changed'))
+        self.assertEqual(response.status_code, 200)
+
+    def test_view_uses_correct_template(self):
+        self.client.login(username='admin@gmail.com', password='some_pswrd1')
+        response = self.client.get(reverse('users:password_changed'))
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, 'registration/password_changed.html')
+
+    def test_redirection_if_user_is_not_logged_in(self):
+        response = self.client.get(reverse('users:password_changed'))
+        self.assertEqual(response.status_code, 302)
+        self.assertRedirects(response, '/users/login/?next=%2Fusers%2Fpassword_changed')
+
+
+class ProfileChangedViewTest(TestCase):
+
+    def setUp(self):
+        admin = User.objects.create(username='admin', email='admin@gmail.com', email_verified=True)
+        admin.set_password('some_pswrd1')
+        admin.save()
+
+    def test_view_url_exists_at_desired_location(self):
+        self.client.login(username='admin@gmail.com', password='some_pswrd1')
+        response = self.client.get('/users/profile_changed')
+        self.assertEqual(response.status_code, 200)
+
+    def test_view_url_accessible_by_name(self):
+        self.client.login(username='admin@gmail.com', password='some_pswrd1')
+        response = self.client.get(reverse('users:profile_changed'))
+        self.assertEqual(response.status_code, 200)
+
+    def test_view_uses_correct_template(self):
+        self.client.login(username='admin@gmail.com', password='some_pswrd1')
+        response = self.client.get(reverse('users:profile_changed'))
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, 'registration/profile_changed.html')
+
+    def test_redirection_if_user_is_not_logged_in(self):
+        response = self.client.get(reverse('users:profile_changed'))
+        self.assertEqual(response.status_code, 302)
+        self.assertRedirects(response, '/users/login/?next=%2Fusers%2Fprofile_changed')
+
+
+class LoginViewTest(TestCase):
+
+    def setUp(self):
+        admin = User.objects.create(username='admin', email='admin@gmail.com', email_verified=True)
+        admin.set_password('some_pswrd1')
+        admin.save()
+
+    def test_login_user_with_correct_email_and_password(self):
+        login = self.client.login(username='admin@gmail.com', password='some_pswrd1')
+        self.assertTrue(login)
+
+    def test_login_user_with_correct_email_and_incorrect_password(self):
+        login = self.client.login(username='admin@gmail.com', password='some_pswrd2')
+        self.assertFalse(login)
+
+    def test_login_user_with_incorrect_email_and_correct_password(self):
+        login = self.client.login(username='aDdmin@gmail.com', password='some_pswrd1')
+        self.assertFalse(login)
+
+    def test_view_url_exists_at_desired_location(self):
+        response = self.client.get('/users/login', follow=True)
+        self.assertEqual(response.status_code, 200)
+
+    def test_view_url_accessible_by_name(self):
+        response = self.client.get(reverse('users:login'))
+        self.assertEqual(response.status_code, 200)
+
+    def test_view_uses_correct_template(self):
+        response = self.client.get(reverse('users:login'))
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, 'registration/login.html')
+
+
+class ProfileViewTest(TestCase):
+
+    def setUp(self):
+        admin = User.objects.create(username='admin', email='admin@gmail.com', email_verified=True)
+        admin.set_password('some_pswrd1')
+        admin.save()
+
+    def test_view_url_exists_at_desired_location(self):
+        self.client.login(username='admin@gmail.com', password='some_pswrd1')
+        response = self.client.get('/users/profile')
+        self.assertEqual(response.status_code, 200)
+
+    def test_view_url_accessible_by_name(self):
+        self.client.login(username='admin@gmail.com', password='some_pswrd1')
+        response = self.client.get(reverse('users:profile'))
+        self.assertEqual(response.status_code, 200)
+
+    def test_view_uses_correct_template(self):
+        self.client.login(username='admin@gmail.com', password='some_pswrd1')
+        response = self.client.get(reverse('users:profile'))
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, 'registration/profile.html')
+
+    def test_change_users_profile_with_new_email(self):
+        user = User.objects.get(id=1)
+        login = self.client.login(username='admin@gmail.com', password='some_pswrd1')
+        data = {
+            'username': 'testuser',
+            'email': 'testuser@email.com',
+            'first_name': 'Dima',
+            'last_name': 'Khorkov',
+            'birthday': '06.05.1998',
+            'phone': '89112572869',
+            'password1': 'Admin_password123',
+            'password2': 'Admin_password123',
+        }
+        response = self.client.post(reverse('users:profile'), data=data)
+        self.assertEqual(response.status_code, 302)
+        self.assertRedirects(response, '/users/profile_changed')
+
+    def test_redirection_if_user_is_not_logged_in(self):
+        response = self.client.get(reverse('users:profile'))
+        self.assertEqual(response.status_code, 302)
+        self.assertRedirects(response, '/users/login/?next=/users/profile')
+
+
+class RegisterViewTest(TestCase):
+
+    def test_view_url_exists_at_desired_location(self):
+        response = self.client.get('/users/register', follow=True)
+        self.assertEqual(response.status_code, 200)
+
+    def test_view_url_accessible_by_name(self):
+        response = self.client.get(reverse('users:register'))
+        self.assertEqual(response.status_code, 200)
+
+    def test_view_uses_correct_template(self):
+        response = self.client.get(reverse('users:register'))
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, 'registration/register.html')
+
+    def test_registration(self):
+        data = {
+            'username': 'testuser',
+            'email': 'testuser@email.com',
+            'first_name': 'Dima',
+            'last_name': 'Khorkov',
+            'birthday': '06.05.1998',
+            'phone': '89112572869',
+            'password1': 'Admin_password123',
+            'password2': 'Admin_password123',
+        }
+        response = self.client.post(reverse('users:register'), data=data, follow=True)
+        self.assertEqual(response.status_code, 200)
+        number_of_users = len(User.objects.all())
+        self.assertEqual(number_of_users, 1)
+        self.assertRedirects(response, '/users/confirm_email')
