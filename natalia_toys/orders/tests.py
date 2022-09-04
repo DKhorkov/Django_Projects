@@ -1,9 +1,11 @@
 from django.test import TestCase
+from django.urls import reverse
 
 from .models import Order, OrderItem
 from users.models import User
 from toys.models import Toy
 from .forms import OrderCreateForm
+from cart.cart import Cart
 
 
 class OrderModelTest(TestCase):
@@ -174,3 +176,87 @@ class OrderCreateFormTest(TestCase):
         self.assertTrue(form.fields['city'])
         self.assertTrue(form.fields['address'])
         self.assertTrue(form.fields['postal_code'])
+
+
+class CreateOrderViewTest(TestCase):
+
+    def setUp(self):
+        admin = User.objects.create(username='admin', email='admin@gmail.com', email_verified=True)
+        admin.set_password('some_pswrd1')
+        admin.save()
+        toy = Toy.objects.create(title='rat', price=140, is_available=True)
+
+    def test_view_url_exists_at_desired_location(self):
+        response = self.client.get('/orders/', follow=True)
+        self.assertEqual(response.status_code, 200)
+
+    def test_view_url_accessible_by_name(self):
+        login = self.client.login(username='admin@gmail.com', password='some_pswrd1')
+        response = self.client.get(reverse('orders:create_order'))
+        self.assertEqual(response.status_code, 200)
+
+    def test_view_uses_correct_template(self):
+        login = self.client.login(username='admin@gmail.com', password='some_pswrd1')
+        response = self.client.get(reverse('orders:create_order'))
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, 'orders/create_order.html')
+
+    def test_creating_order_with_valid_form(self):
+        login = self.client.login(username='admin@gmail.com', password='some_pswrd1')
+        toy = Toy.objects.get(id=1)
+        request = self.client.request()
+        request.session = self.client.session
+        cart = Cart(request)
+        cart.add_to_cart(toy=toy, quantity=2)
+        data = {'first_name': 'admin', 'last_name': 'rules', 'email': 'admin@gmail.com', 'country': 'USA',
+                'city': 'NY', 'address': 'Wall Street, 10, 28', 'postal_code': 199567}
+        form = OrderCreateForm(data=data)
+        self.assertTrue(form.is_valid())
+        response = self.client.post(reverse('orders:create_order'), data=data, cart=cart)
+        self.assertEqual(response.status_code, 302)
+        number_of_orders = len(Order.objects.all())
+        self.assertEqual(number_of_orders, 1)
+
+    def test_creating_order_without_login(self):
+        response = self.client.get(reverse('orders:create_order'))
+        self.assertEqual(response.status_code, 302)
+        self.assertRedirects(response, '/users/login/?next=/orders/')
+
+    def test_creating_order_with_invalid_form(self):
+        login = self.client.login(username='admin@gmail.com', password='some_pswrd1')
+        toy = Toy.objects.get(id=1)
+        request = self.client.request()
+        request.session = self.client.session
+        cart = Cart(request)
+        cart.add_to_cart(toy=toy, quantity=2)
+        data = {}
+        form = OrderCreateForm(data=data)
+        self.assertFalse(form.is_valid())
+        response = self.client.post(reverse('orders:create_order'), data=data, cart=cart)
+        self.assertEqual(response.status_code, 200)
+        number_of_orders = len(Order.objects.all())
+        self.assertEqual(number_of_orders, 0)
+
+
+class OrdersHistoryViewTest(TestCase):
+
+    def setUp(self):
+        admin = User.objects.create(username='admin', email='admin@gmail.com', email_verified=True)
+        admin.set_password('some_pswrd1')
+        admin.save()
+        toy = Toy.objects.create(title='rat', price=140, is_available=True)
+
+    def test_view_url_exists_at_desired_location(self):
+        response = self.client.get('/orders/orders_history', follow=True)
+        self.assertEqual(response.status_code, 200)
+
+    def test_view_url_accessible_by_name(self):
+        login = self.client.login(username='admin@gmail.com', password='some_pswrd1')
+        response = self.client.get(reverse('orders:orders_history'))
+        self.assertEqual(response.status_code, 200)
+
+    def test_view_uses_correct_template(self):
+        login = self.client.login(username='admin@gmail.com', password='some_pswrd1')
+        response = self.client.get(reverse('orders:orders_history'))
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, 'orders/orders_history.html')
