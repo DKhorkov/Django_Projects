@@ -12,7 +12,7 @@ class UserModelTest(TestCase):
     @classmethod
     def setUpTestData(cls):
         """Настройка не модифицированных объектов, используемых всеми методами тестирования."""
-        user = User.objects.create(username='admin', email='admin@gmail.com', is_active=True)
+        user = User.objects.create(username='admin', email='admin@gmail.com', email_verified=True)
         user.set_password('some_pswrd1')
         user.save()
 
